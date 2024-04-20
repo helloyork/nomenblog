@@ -1,3 +1,7 @@
 .glow {
     filter: url(#glow);
 }
+
+#navbar header {
+    justify-content: center;
+}

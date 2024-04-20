@@ -1,10 +1,40 @@
 import type { Config } from "tailwindcss";
 
+import { NextUIPluginConfig, nextui } from "@nextui-org/react";
+
+const nextUIConfig: NextUIPluginConfig = {
+    addCommonColors: false,
+    themes: {
+        light: {
+            layout: {
+
+            }
+        },
+        dark: {
+            colors: {
+                background: "#141414",
+                primary: {
+                    100: "#F3F3F3",
+                    200: "#E7E7E7",
+                    300: "#B8B8B8",
+                    400: "#727272",
+                    500: "#141414",
+                    600: "#110E0E",
+                    700: "#0E0A0A",
+                    800: "#0B0607",
+                    900: "#090305",
+                }
+            }
+        }
+    }
+}
+
 const config: Config = {
     content: [
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {
@@ -12,21 +42,11 @@ const config: Config = {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
                 "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
             },
-            keyframes: {
-                "fade-in": {
-                    "0%": {
-                        opacity: "0%",
-                    },
-                    "75%": {
-                        opacity: "0%",
-                    },
-                    "100%": {
-                        opacity: "100%",
-                    },
-                },
-            }
         },
     },
-    plugins: [],
+    darkMode: "class",
+    plugins: [
+        nextui(nextUIConfig)
+    ],
 };
 export default config;
