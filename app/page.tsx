@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import clsx from "clsx";
 
 import { nav } from "@lib/data/site";
@@ -39,7 +39,7 @@ export default function Home() {
             </div>
 
             <div style={{
-                position: 'relative',
+                position: "relative",
                 "--tw-translate-x": `${x / 50}px`,
                 "--tw-translate-y": `${y / 50}px`,
                 transform: "translate(var(--tw-translate-x), var(--tw-translate-y))"
