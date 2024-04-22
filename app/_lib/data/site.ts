@@ -1,7 +1,7 @@
 
 export const meta = {
-    title: "AOOS Draft",
-    description: "A draft of the AOOS website",
+    title: "Nomen Blog",
+    description: "Nomen Blog",
 };
 
 export const SiteMap = {
@@ -18,10 +18,10 @@ export const SiteMap = {
             href: "/about",
             title: "About"
         },
-        contact: {
-            href: "/contact",
-            title: "Contact"
-        },
+        projects: {
+            href: "/projects",
+            title: "Projects"
+        }
 
     }
 }
@@ -30,13 +30,14 @@ export const nav = [
     {
         title: "Blog",
         href: SiteMap.route.blog.href,
+        disabled: true,
     },
     {
         title: "About",
         href: SiteMap.route.about.href,
     },
     {
-        title: "Contact",
-        href: SiteMap.route.contact.href,
+        title: "Projects",
+        href: SiteMap.route.projects.href,
     },
 ];
