@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 import Logo from "../components/logo";
 import { nav } from "@lib/data/site";
@@ -10,20 +10,43 @@ import { usePathname } from "next/navigation";
 import { SiteMap } from "@lib/data/site";
 import { useTheme } from "@lib/data/theme";
 
+import NavLinks from "@lib/components/navlinks";
+
 
 export default function Nav() {
+    const [_isOnTop, _setIsOnTop] = React.useState(true);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
     const state = {
         path: usePathname(),
-        theme: useTheme()
+        theme: useTheme(),
+        getIsOnTop: () => _isOnTop,
+    }
+    const controller = {
+        setIsOnTop: _setIsOnTop
     }
 
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 0) {
+                controller.setIsOnTop(false);
+            } else {
+                controller.setIsOnTop(true);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+        return () => window.removeEventListener("scroll", handleScroll);
+    });
+    
 
     return (
         <Navbar className={clsx({
             "hidden": state.path === SiteMap.route.home.href
-        })} position={"sticky"} onMenuOpenChange={setIsMenuOpen}
-        id="navbar">
+        }, {
+            "bg-transparent": state.getIsOnTop(),
+        }, "transition-color fixed")} onMenuOpenChange={setIsMenuOpen}
+        id="navbar" isBordered={!state.getIsOnTop()}>
             <NavbarMenuToggle
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 className="sm:hidden"
@@ -32,24 +55,7 @@ export default function Nav() {
                 <Link href={SiteMap.route.home.href}><Logo light={false} className={" min-h-10 w-24 h-24"} /></Link>
             </NavbarBrand> */}
             <NavbarContent className="hidden sm:flex gap-4 justify-items-center" justify="center">
-                {nav.map((item, index) => {
-                    let isActive = state.path === item.href;
-                    return (
-                        <React.Fragment key={index}>
-                            <NavbarItem>
-                                <Link href={item.href} className={clsx(" transition-all group rounded-lg  mx-2",
-                                    `dark:hover:text-gray-300 dark:text-gray-500
-                            hover:text-gray-300 text-gray-400  
-                             select-none`
-                                    , {
-                                        "dark:text-gray-300 text-gray-300 ": isActive,
-                                        "dark:text-gray-500 text-gray-400": !isActive
-                                    })}
-                                    aria-current={isActive ? "page" : undefined}>{item.title}</Link>
-                            </NavbarItem>
-                        </React.Fragment>
-                    )
-                })}
+                <NavLinks wrapper={(node)=>(<NavbarItem>{node}</NavbarItem>)} />
             </NavbarContent>
             {/* <NavbarContent justify="end">
                 <NavbarItem className="hidden lg:flex">

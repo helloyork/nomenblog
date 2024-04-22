@@ -11,6 +11,8 @@ import { motion } from "framer-motion"
 import clsx from "clsx";
 
 import { nav } from "@lib/data/site";
+import NavLinks from "@lib/components/navlinks";
+import LogoAnimation from "./_lib/components/logo-animation";
 
 export default function Home() {
 
@@ -38,12 +40,14 @@ export default function Home() {
             <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
             </div>
 
-            <div style={{
+            <motion.div style={{
                 position: 'relative',
                 "--tw-translate-x": `${x / 50}px`,
                 "--tw-translate-y": `${y / 50}px`,
                 transform: "translate(var(--tw-translate-x), var(--tw-translate-y))"
             }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 className={clsx(
                     ` justify-center align-middle relative flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full 
                     before:content-[''] after:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 
@@ -57,7 +61,7 @@ export default function Home() {
 
                     sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]`,
                 )}>
-            </div>
+            </motion.div>
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -67,6 +71,7 @@ export default function Home() {
             >
                 <div>
                     <Logo className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 dark:drop-shadow-[0_0_0.8rem_#ffffff70] w-32 h-32 transition-all" />
+                    {/* <LogoAnimation className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 dark:drop-shadow-[0_0_0.8rem_#ffffff70] w-32 h-32" /> */}
                 </div>
             </motion.div>
 
@@ -76,16 +81,7 @@ export default function Home() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
             >
                 <div className=" flex mb-16 text-center lg:mb-0 lg:w-full lg:max-w-5xl items-center justify-center">
-                    {nav.map((item, index) => (
-                        <React.Fragment key={index}>
-                            <Link href={item.href} className={clsx(" transition-all group rounded-lg  mx-2",
-                                `dark:hover:text-gray-300 dark:text-gray-500
-                            hover:text-gray-300 text-gray-400  
-                             select-none`
-                            )}>{item.title}</Link>
-                            {index < nav.length - 1 && <span className="mx-2 dark:text-gray-700 text-gray-300 select-none">|</span>}
-                        </React.Fragment>
-                    ))}
+                    <NavLinks separate={true} />
                 </div>
             </motion.div>
             {/* <a
