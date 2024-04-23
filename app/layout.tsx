@@ -12,6 +12,7 @@ import React from "react";
 import clsx from "clsx";
 import { Providers } from "./providers";
 import Nav from "@lib/elements/navbar";
+import { useTheme } from "./_lib/data/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,14 +28,14 @@ export default function RootLayout({
             <body className={
                 clsx(
                     inter.className,
-                    "h-full"
+                    "h-full min-h-screen bg-background dark:bg-primary-500 dark:text-primary-100 transition-colors duration-200 ease-in-out"
                 )
             }>
                 <Providers>
                     <div className={clsx("dark")}>
                         <Nav />
                     </div>
-                    <main className="text-foreground bg-background dark">
+                    <main className={clsx("text-foreground bg-background", "dark", "h-full min-h-screen")}>
                         {children}
                     </main>
                 </Providers>

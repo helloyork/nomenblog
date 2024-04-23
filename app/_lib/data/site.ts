@@ -24,13 +24,36 @@ export const SiteMap = {
         }
 
     }
-}
+};
+
+export const Projects = [
+    {
+        title: "AIAPA",
+        subtitle: "NodeJS",
+        status: "Finished",
+        description: "This is a fast and easy Amazon product analysis tool that crawls product information and analyzes it with AI through automated scripts, ultimately generating product reports.",
+        link: "https://github.com/helloyork/aiapa",
+    },
+    {
+        title: "NomenBlog",
+        subtitle: "NextJS",
+        status: "In Progress",
+        description: "This is a blog site that uses NextJS and TailwindCSS.",
+        link: "https://github.com/helloyork/nomenblog"
+    },
+    {
+        title: "ChatGPT-CLI",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "This is a CLI tool that uses AI to generate text.",
+        link: "https://github.com/helloyork/chatgpt-cmd"
+    }
+];
 
 export const nav = [
     {
         title: "Blog",
         href: SiteMap.route.blog.href,
-        disabled: true,
     },
     {
         title: "About",

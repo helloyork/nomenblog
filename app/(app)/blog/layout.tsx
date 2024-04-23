@@ -1,17 +1,13 @@
 "use client";
 
-
-import { AnimatePresence } from 'framer-motion';
+import React from "react";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <>
-            <AnimatePresence>
-                <div className="mt-24 mb-24 mx-12   ">
-                    {children}
-                </div>
-            </AnimatePresence>
+            <div className="mt-32 mb-24 mx-12 sm:mx-24 bg-primary-500">
+                {children}
+            </div>
         </>
     );
-};
-
+}

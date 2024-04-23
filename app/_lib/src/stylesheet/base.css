@@ -5,3 +5,68 @@
 #navbar header {
     justify-content: center;
 }
+
+
+#blog-md h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+#blog-md h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+#blog-md h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+#blog-md h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+#blog-md h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+#blog-md h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+#blog-md p {
+    font-size: 1em;
+    margin: 1em 0;
+}
+
+#blog-md a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#blog-md a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+#blog-md code {
+    font-family: monospace;
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+}
+
+#blog-md pre {
+    border-radius: 3px;
+    padding: 1em;
+    font-size: 85%;
+    line-height: 1.42;
+}
+
+#blog-md pre code {
+    padding: 0;
+}

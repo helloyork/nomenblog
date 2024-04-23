@@ -1,22 +1,14 @@
 "use client";
 
-import PopOut from "@/app/_lib/components/pop-out";
+import { Projects } from "@/app/_lib/data/site";
 import Title from "@/app/_lib/elements/title";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 export default function Page() {
-    const items = [
-        {
-            title: "Docs",
-            subtitle: "Next.js",
-            description: "Find in-depth information about Next.js features and API.",
-            link: "https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app",
-        },
-    ];
-    const [selectedId, setSelectedId] = useState<null | number>(null)
-    console.log(selectedId)
+    const items = Projects;
+    const [selectedId, setSelectedId] = useState<null | number>(null);
     return (
         <>
             <Title title="Projects" subtitle="My Projects" />
@@ -25,25 +17,35 @@ export default function Page() {
                 "flex row-auto justify-start items-start",
             )}>
                 {items.map((item, i) => (
-
                     <motion.div layoutId={String(i)} onClick={() => setSelectedId(i)} key={"item-" + i}
                         className={clsx(
-                            "group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 select-none",
-                            " w-1/4 h-48",
+                            "group rounded-md border border-gray-300 dark:border-neutral-600 sm:dark:border-neutral-800 px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 select-none",
+                            " w-64 h-48 shadow-md cursor-pointer mr-4",
                         )}>
                         <motion.div className="flex items-center">
-<motion.div className="flex items-end">
-    <motion.h2 className="text-2xl font-semibold">
-        {item.title}
-    </motion.h2>
-    <motion.p className="max-w-[30ch] text-sm opacity-50 mr-4">
-        {item.subtitle}
-    </motion.p>
-</motion.div>
+                            <motion.div className="flex items-end">
+                                <motion.h2 className="text-2xl font-semibold">
+                                    {item.title}
+                                </motion.h2>
+                            </motion.div>
                             <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
                                 -&gt;
                             </motion.span>
                         </motion.div>
+
+                        <motion.p className="max-w-[30ch] text-sm opacity-50 mr-4 mb-4">
+                            {item.subtitle}
+                        </motion.p>
+                        <motion.p className="m-0 max-w-[30ch] text-sm opacity-50">
+                            {((function () {
+                                let maxDescriptionLength = 80;
+                                if (item.description.length > maxDescriptionLength) {
+                                    return item.description.substring(0, maxDescriptionLength) + "...";
+                                } else {
+                                    return item.description;
+                                }
+                            })())}
+                        </motion.p>
                     </motion.div>
                 ))}
                 <AnimatePresence>
@@ -60,19 +62,28 @@ export default function Page() {
                                 <motion.a layoutId={String(selectedId)}
                                     href={item.link}
                                     className={clsx(
-                                        "group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30",
-                                        " w-1/3 h-64",
+                                        "group rounded-md border border-gray-300 dark:border-neutral-500 px-5 py-4 transition-colors hover:border-gray-400 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30",
+                                        " sm:w-1/2 sm: m-0 h-64 w-full mx-8",
                                     )}>
-                                    <motion.h2 className="mb-3 text-2xl font-semibold">
-                                        {item.title}{" "}
-                                        <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
-                                            -&gt;
-                                        </motion.span>
-                                    </motion.h2>
-                                    <motion.p className="m-0 max-w-[30ch] text-sm opacity-50">
+                                    <motion.div
+                                        className={clsx(
+                                            "flex justify-between"
+                                        )}>
+                                        <motion.h2 className=" text-2xl font-semibold">
+                                            {item.title}{" "}
+                                            <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
+                                                -&gt;
+                                            </motion.span>
+                                        </motion.h2>
+                                        
+                                        <motion.h2 className=" text-sm font-light text-neutral-500">
+                                            {item.status}
+                                        </motion.h2>
+                                    </motion.div>
+                                    <motion.p className="m-0 text-sm opacity-50 mb-4">
                                         {item.subtitle}
                                     </motion.p>
-                                    <motion.p className="m-0 max-w-[30ch] text-sm opacity-50">
+                                    <motion.p className="m-0 text-sm opacity-50">
                                         {item.description}
                                     </motion.p>
                                 </motion.a>
