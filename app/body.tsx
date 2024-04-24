@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
+
 import clsx from "clsx";
-import { Providers } from "./providers";
 import { useTheme } from "@lib/data/theme";
 import Nav from "@lib/elements/navbar";
 

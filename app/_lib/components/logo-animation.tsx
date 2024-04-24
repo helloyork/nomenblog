@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { motion } from "framer-motion";
 
 
@@ -17,7 +16,7 @@ export default function LogoAnimation({ className, color = "white", light = true
             pathSpacing: 1,
             pathOffset: 1,
         }
-    }
+    };
 
     return (
         <motion.svg xmlns="http://www.w3.org/2000/svg" width="104.603" height="23.07" viewBox="0 0 104.603 23.07" className={`${className} glow`}>

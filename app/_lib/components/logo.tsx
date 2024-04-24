@@ -1,4 +1,4 @@
-import clsx from "clsx";
+
 
 export default function Logo({ className, color = "white", light = true }: { className?: string, color?: string, light?: boolean }) {
     return (

@@ -1,11 +1,11 @@
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { Fragment, useRef, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export default function PopOut({ title, content }: Readonly<{ title: string, content: string }>) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
 
-    const cancelButtonRef = useRef(null)
+    const cancelButtonRef = useRef(null);
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -67,5 +67,5 @@ export default function PopOut({ title, content }: Readonly<{ title: string, con
                 </div>
             </Dialog>
         </Transition.Root>
-    )
+    );
 }

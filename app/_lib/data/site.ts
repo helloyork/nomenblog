@@ -1,7 +1,10 @@
 
-export const meta = {
+import type { Metadata } from "next";
+
+export const meta: Metadata = {
     title: "Nomen Blog",
     description: "Nomen Blog",
+    icons: "/static/favicon.ico",
 };
 
 export const SiteMap = {

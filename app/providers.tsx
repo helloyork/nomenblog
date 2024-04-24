@@ -3,7 +3,7 @@
 import React from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import ThemeContextProvider, { useTheme } from "@lib/data/theme";
+import ThemeContextProvider from "@lib/data/theme";
 
 
 export function Providers({ children }: { children: React.ReactNode }) {

@@ -39,9 +39,7 @@ export default function Home() {
 
             <motion.div style={{
                 position: "relative",
-                "--tw-translate-x": `${x / 50}px`,
-                "--tw-translate-y": `${y / 50}px`,
-                transform: "translate(var(--tw-translate-x), var(--tw-translate-y))"
+                transform: `translate(${x / 50}px, ${y / 50}px)`
             }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

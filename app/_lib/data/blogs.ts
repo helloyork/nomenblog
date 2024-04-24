@@ -9,6 +9,7 @@ export type Blog = {
     content: string;
 };
 
+// eslint-disable-next-line no-unused-vars
 function toSeoFriendly(title: string): string {
     return title
         .toLowerCase()

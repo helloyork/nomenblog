@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 import Logo from "../components/logo";
 import { nav } from "@lib/data/site";
 import clsx from "clsx";

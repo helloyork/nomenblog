@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 const ThemeContext = createContext({
     theme: "light",
+    // eslint-disable-next-line no-unused-vars
     setTheme: (theme: string) => { },
 });
 
@@ -24,7 +25,7 @@ export default function ThemeContextProvider({ children, value = "light" }: Read
                 localStorage.setItem("theme", theme);
             }
         }
-    }, []);
+    }, [theme, value]);
 
 
     return (
@@ -32,9 +33,9 @@ export default function ThemeContextProvider({ children, value = "light" }: Read
             {children}
         </ThemeContext.Provider>
     );
-};
+}
 
 export function useTheme() {
     return useContext(ThemeContext);
-};
+}
 
