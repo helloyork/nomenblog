@@ -14,19 +14,19 @@ export default function Page() {
             <Title title="Projects" subtitle="My Projects" />
             <div className={clsx(
                 " text-left",
-                "flex row-auto justify-start items-start",
+                "flex flex-col md:flex-row row-auto justify-start items-start pb-4",
             )}>
                 {items.map((item, i) => (
                     <motion.div layoutId={String(i)} onClick={() => setSelectedId(i)} key={"item-" + i}
                         className={clsx(
                             "group rounded-md border border-gray-300 dark:border-neutral-600 sm:dark:border-neutral-800 px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 select-none",
-                            " w-64 h-48 shadow-md cursor-pointer mr-4",
+                            " w-full md:w-64 h-48 shadow-md cursor-pointer mr-4 mb-4",
                         )}>
                         <motion.div className="flex items-center">
                             <motion.div className="flex items-end">
-                                <motion.h2 className="text-2xl font-semibold">
+                                <h2 className="text-2xl font-semibold">
                                     {item.title}
-                                </motion.h2>
+                                </h2>
                             </motion.div>
                             <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
                                 -&gt;
@@ -53,7 +53,7 @@ export default function Page() {
                         const item = items[selectedId];
                         return (
                             <motion.div
-                                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-filter backdrop-blur-md"
+                                className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-30 dark:bg-black dark:bg-opacity-50 backdrop-filter backdrop-blur-md"
                                 onClick={() => setSelectedId(null)}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -62,7 +62,7 @@ export default function Page() {
                                 <motion.a layoutId={String(selectedId)}
                                     href={item.link}
                                     className={clsx(
-                                        "group rounded-md border border-gray-300 dark:border-neutral-500 px-5 py-4 transition-colors hover:border-gray-400 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30",
+                                        "group rounded-md border bg-neutral-100 dark:bg-transparent border-gray-300 dark:border-neutral-500 px-5 py-4 transition-colors hover:border-gray-400 hover:bg-neutral-200 dark:hover:bg-neutral-300 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30",
                                         " sm:w-1/2 sm: m-0 h-64 w-full mx-8",
                                     )}>
                                     <motion.div

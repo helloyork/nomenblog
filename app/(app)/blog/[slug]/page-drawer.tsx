@@ -15,7 +15,7 @@ export default function PageDrawer({ data, className }: { data: AppRes<Blog | un
     }
 
     return (
-        <div className="text-left">
+        <div className="text-left pb-12">
             <Title title={data.data?.title || "Blog"} subtitle={data.data?.date || ""} />
             <MarkDown data={data.data.content} className={className} />
         </div>

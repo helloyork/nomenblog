@@ -11,8 +11,7 @@ import { meta } from "./_lib/data/site";
 import React from "react";
 import clsx from "clsx";
 import { Providers } from "./providers";
-import Nav from "@lib/elements/navbar";
-import { useTheme } from "./_lib/data/theme";
+import Body from "./body";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,20 +23,17 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="h-full">
+        <html lang="en" className={clsx("h-full")}>
             <body className={
                 clsx(
                     inter.className,
-                    "h-full min-h-screen bg-background dark:bg-primary-500 dark:text-primary-100 transition-colors duration-200 ease-in-out"
+                    "h-full min-h-screen bg-white dark:bg-primary-500 dark:text-primary-100 transition-colors duration-200 ease-in-out",
                 )
             }>
                 <Providers>
-                    <div className={clsx("dark")}>
-                        <Nav />
-                    </div>
-                    <main className={clsx("text-foreground bg-background", "dark", "h-full min-h-screen")}>
+                    <Body>
                         {children}
-                    </main>
+                    </Body>
                 </Providers>
             </body>
         </html>

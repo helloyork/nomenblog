@@ -1,16 +1,34 @@
 "use client";
 
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
 import { useContext } from "react";
 
-const ThemeContext = createContext("dark");
+const ThemeContext = createContext({
+    theme: "light",
+    setTheme: (theme: string) => { },
+});
+
 
 export default function ThemeContextProvider({ children, value = "light" }: Readonly<{
     children: React.ReactNode;
     value?: string;
 }>) {
+    const [theme, setTheme] = React.useState(value);
+    useEffect(() => {
+        setTheme(value);
+        if (typeof window !== "undefined") {
+            const localTheme = localStorage.getItem("app-theme");
+            if (localTheme && localTheme !== theme && ["light", "dark"].includes(localTheme)) {
+                setTheme(localTheme);
+            } else {
+                localStorage.setItem("theme", theme);
+            }
+        }
+    }, []);
+
+
     return (
-        <ThemeContext.Provider value={value}>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
             {children}
         </ThemeContext.Provider>
     );

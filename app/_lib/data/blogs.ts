@@ -17,17 +17,35 @@ function toSeoFriendly(title: string): string {
 }
 
 const Blogs: Record<string, Blog> = {
-    "test-blog": {
-        title: "Test Blog",
-        href: "test-blog",
-        date: "2021-07-01",
-        content: `This is a test blog.  
-        hello, \`world\`!`
+    "hello-world": {
+        title: "Hello World!",
+        href: "hello-world",
+        date: "2024-04-23",
+        content: `# Hello World!  
+
+hi, this is my first blog post.
+
+## What is this blog about?
+
+This blog is about my journey as a developer. I will be sharing my experiences, projects, and thoughts on various topics related to software development.
+
+## Why did I start this blog?
+
+I started this blog to document my journey and share my knowledge with others. I hope that my blog posts will help others who are also learning to code.
+
+## What can you expect from this blog?
+
+You can expect to see blog posts about my projects, tutorials, and tips on software development. I will also be sharing my thoughts on various topics related to programming.
+
+I hope you enjoy reading my blog posts!
+
+> u know wat? this website has many hidden features. try to find them all. :)  
+> don't forget to try dark mode 💡`
     },
     "markdown-syntax-guide": {
         title: "Markdown Syntax Guide",
         href: "markdown-syntax-guide",
-        date: "2023-08",
+        date: "2024-04-22",
         content: `# Markdown syntax guide
 
 ## Headers

@@ -19,7 +19,7 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
 
     const state = {
         path: usePathname(),
-        theme: useTheme(),
+        theme: useTheme().theme,
         getIsOnTop: () => _isOnTop,
     };
     const controller = {
@@ -44,8 +44,8 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
         <Navbar className={clsx({
             "hidden": state.path === SiteMap.route.home.href
         }, {
-            "bg-transparent": state.getIsOnTop(),
-        }, "transition-color fixed", {
+            "bg-white dark:bg-transparent": state.getIsOnTop(),
+        }, "transition-color fixed z-10", {
             "dark": state.theme === "dark",
         })} onMenuOpenChange={setIsMenuOpen} id="navbar" isBordered={!state.getIsOnTop()}>
             <NavbarMenuToggle
@@ -70,8 +70,8 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
                             className={clsx(
                                 "w-full",
                                 {
-                                    " text-primary-300": state.path === item.href,
-                                    "text-white": state.path !== item.href
+                                    " dark:text-primary-300 text-neutral-400": state.path === item.href,
+                                    "dark:text-white text-neutral-600": state.path !== item.href
                                 }
                             )}
                             href={item.href}

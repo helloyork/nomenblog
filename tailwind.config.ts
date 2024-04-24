@@ -8,6 +8,20 @@ const nextUIConfig: NextUIPluginConfig = {
         light: {
             layout: {
 
+            },
+            colors: {
+                background: "#ffffff",
+                primary: {
+                    100: "#ffffff",
+                    200: "#f3f3f3",
+                    300: "#e7e7e7",
+                    400: "#b8b8b8",
+                    500: "#727272",
+                    600: "#141414",
+                    700: "#110e0e",
+                    800: "#0e0a0a",
+                    900: "#0b0607",
+                }
             }
         },
         dark: {

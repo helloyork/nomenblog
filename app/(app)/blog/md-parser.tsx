@@ -11,9 +11,7 @@ export default function MarkDown({ data, className }: { data: string; className?
     useEffect(() => {
         const sanitizeDescription = async () => {
             try {
-                const md = marked(data);
-                console.log(md);
-                console.log(data)
+                const md = await marked(data);
                 const sanitized = DOMPurify.sanitize(md);
                 setSanitizedDescription(sanitized);
             } catch (error) {

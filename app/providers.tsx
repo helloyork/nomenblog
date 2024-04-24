@@ -1,23 +1,37 @@
-// app/providers.tsx
 "use client";
 
 import React from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import ThemeContextProvider from "./_lib/data/theme";
+import ThemeContextProvider, { useTheme } from "@lib/data/theme";
 
-import { useTheme } from "@lib/data/theme";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-    const theme = useTheme();
+    "use client";
+
+    let theme = "light";
+    if (typeof window !== "undefined") {
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            theme = "dark";
+        }
+    }
     return (
         <NextUIProvider>
-            <ThemeContextProvider>
-                <NextThemesProvider attribute="class" defaultTheme={theme}>
+            <ThemeContextProvider value={theme}>
+                <NextTheme theme={theme}>
                     {children}
-                </NextThemesProvider>
+                </NextTheme>
             </ThemeContextProvider>
         </NextUIProvider>
+    );
+}
+
+function NextTheme({ children, theme }: { children: React.ReactNode; theme: string }) {
+    "use client";
+    return (
+        <NextThemesProvider attribute="class" defaultTheme={theme}>
+            {children}
+        </NextThemesProvider>
     );
 }
 
