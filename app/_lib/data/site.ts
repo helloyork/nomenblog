@@ -50,6 +50,13 @@ export const Projects = [
         status: "In Progress",
         description: "This is a CLI tool that uses AI to generate text.",
         link: "https://github.com/helloyork/chatgpt-cmd"
+    },
+    {
+        title: "CommandParser",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "parse minecraft-liked command",
+        link: "https://github.com/helloyork/commandparser"
     }
 ];
 
