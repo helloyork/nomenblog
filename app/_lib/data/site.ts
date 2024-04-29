@@ -52,7 +52,7 @@ export const Projects = [
         link: "https://github.com/helloyork/chatgpt-cmd"
     },
     {
-        title: "CommandParser",
+        title: "@helloyork/CommandParser",
         subtitle: "NodeJS",
         status: "In Progress",
         description: "parse minecraft-liked command",
