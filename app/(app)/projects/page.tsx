@@ -24,13 +24,13 @@ export default function Page() {
                         )}>
                         <motion.div className="flex items-center">
                             <motion.div className="flex items-end">
-                                <h2 className="text-2xl font-semibold">
+                                <h2 className="text-2xl font-semibold break-all">
                                     {item.title}
+                                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none break-normal font-light text-sm ml-1">
+                                        {"->"}
+                                    </span>
                                 </h2>
                             </motion.div>
-                            <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
-                                -&gt;
-                            </motion.span>
                         </motion.div>
 
                         <motion.p className="max-w-[30ch] text-sm opacity-50 mr-4 mb-4">
@@ -69,7 +69,7 @@ export default function Page() {
                                         className={clsx(
                                             "flex justify-between"
                                         )}>
-                                        <motion.h2 className=" text-2xl font-semibold">
+                                        <motion.h2 className=" text-2xl font-semibold break-words">
                                             {item.title}{" "}
                                             <motion.span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none select-none">
                                                 -&gt;
