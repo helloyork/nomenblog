@@ -29,7 +29,7 @@ export default function Page() {
                     )}>Contact Me</p>
                     <p className={clsx(
                         "dark:text-white text-sm font-extralight mt-4",
-                    )}>{"Email: "}<a className=" underline " href="mailto:helloyork@icloud.com">hellohork@icloud.com</a>
+                    )}>{"Email: "}<a className=" underline " href="mailto:helloyork@icloud.com">helloyork@icloud.com</a>
                     </p>
                     <p className={clsx(
                         "dark:text-white text-sm font-extralight",
