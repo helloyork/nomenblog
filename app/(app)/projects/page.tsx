@@ -14,7 +14,7 @@ export default function Page() {
             <Title title="Projects" subtitle="My Projects" />
             <div className={clsx(
                 " text-left",
-                "flex flex-col md:flex-row row-auto justify-start items-start pb-4",
+                "flex flex-col md:flex-row row-auto justify-start items-start pb-4 flex-wrap",
             )}>
                 {items.map((item, i) => (
                     <motion.div layoutId={String(i)} onClick={() => setSelectedId(i)} key={"item-" + i}
