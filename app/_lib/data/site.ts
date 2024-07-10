@@ -57,6 +57,13 @@ export const Projects = [
         status: "In Progress",
         description: "parse minecraft-liked command",
         link: "https://github.com/helloyork/commandparser"
+    },
+    {
+        title: "create-arena-project",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "Arena Project Skeleton",
+        link: "https://github.com/helloyork/create-arena-project"
     }
 ];
 
