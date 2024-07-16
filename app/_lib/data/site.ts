@@ -64,6 +64,13 @@ export const Projects = [
         status: "In Progress",
         description: "Arena Project Skeleton",
         link: "https://github.com/helloyork/create-arena-project"
+    },
+    {
+        title: "excel2ts",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "Convert Excel files to TypeScript Static Types and Datas",
+        link: "https://github.com/helloyork/excel2ts"
     }
 ];
 
