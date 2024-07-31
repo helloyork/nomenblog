@@ -71,6 +71,13 @@ export const Projects = [
         status: "In Progress",
         description: "Convert Excel files to TypeScript Static Types and Datas",
         link: "https://github.com/helloyork/excel2ts"
+    },
+    {
+        title: "OtherSideProject-Electron",
+        subtitle: "Electron",
+        status: "In Progress",
+        description: "Electron version for OtherSideProject",
+        link: "https://github.com/helloyork/OtherSideProject-Electron"
     }
 ];
 
