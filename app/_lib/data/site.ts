@@ -52,6 +52,13 @@ export const Projects = [
         link: "https://github.com/helloyork/chatgpt-cmd"
     },
     {
+        title: "MewBaka/OtherSidePROJECT",
+        subtitle: "Nextron",
+        status: "In Progress",
+        description: "New Otherworldly Adventure Visual Novel powered by Nextron",
+        link: "https://github.com/MewBaka/OtherSideProject"
+    },
+    {
         title: "@helloyork/CommandParser",
         subtitle: "NodeJS",
         status: "In Progress",
@@ -73,9 +80,9 @@ export const Projects = [
         link: "https://github.com/helloyork/excel2ts"
     },
     {
-        title: "OtherSideProject-Electron",
+        title: "helloyork/OtherSideProject-Electron",
         subtitle: "Electron",
-        status: "In Progress",
+        status: "Archived",
         description: "Electron version for OtherSideProject",
         link: "https://github.com/helloyork/OtherSideProject-Electron"
     }
