@@ -59,18 +59,18 @@ export const Projects = [
         link: "https://github.com/MewBaka/OtherSideProject"
     },
     {
+        title: "NarraLeaf-React",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "React-based visual novel framework",
+        link: "https://github.com/helloyork/narraleaf-react"
+    },
+    {
         title: "@helloyork/CommandParser",
         subtitle: "NodeJS",
         status: "In Progress",
         description: "parse minecraft-liked command",
         link: "https://github.com/helloyork/commandparser"
-    },
-    {
-        title: "create-arena-project",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "Arena Project Skeleton",
-        link: "https://github.com/helloyork/create-arena-project"
     },
     {
         title: "excel2ts",
