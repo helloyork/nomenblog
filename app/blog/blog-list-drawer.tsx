@@ -12,7 +12,7 @@ export default function BlogListDrawer({ data }: { data: Blog[] }) {
     return (
         <div className="text-left bg-white dark:bg-primary-500">
             {data.map((item, i) => (
-                <Link href={"/me/blog/content/" + item.href} key={"item-" + i} className="no-underline">
+                <Link href={"/blog/content/" + item.href} key={"item-" + i} className="no-underline">
                     <motion.div layoutId={String(i)} onClick={() => setSelectedId(i)}
                         className={clsx(
                             "bg-white dark:bg-transparent hover:bg-neutral-100 group rounded-md border border-gray-300 dark:border-neutral-600 sm:dark:border-neutral-800 hover:border-gray-300 dark:hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30",

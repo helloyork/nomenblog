@@ -14,15 +14,15 @@ export const SiteMap = {
             title: "Home"
         },
         blog: {
-            href: "/me/blog",
+            href: "/blog",
             title: "Blog"
         },
         about: {
-            href: "/me/about",
+            href: "/about",
             title: "About"
         },
         projects: {
-            href: "/me/projects",
+            href: "/projects",
             title: "Projects"
         },
     }

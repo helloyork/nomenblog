@@ -12,6 +12,7 @@ import React from "react";
 import clsx from "clsx";
 import { Providers } from "./providers";
 import Body from "./body";
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
                     "h-full min-h-screen bg-white dark:bg-primary-500 dark:text-primary-100 transition-colors duration-200 ease-in-out",
                 )
             }>
+                <Analytics />
                 <Providers>
                     <Body>
                         {children}
