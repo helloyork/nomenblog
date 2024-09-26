@@ -7,7 +7,6 @@ export type Blog = {
     title: string;
     date: string;
     href: string;
-    content: string;
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -38,7 +37,6 @@ export async function getBlogList(offset: number = 0, limit: number = 10): Promi
         status: "success",
         data: Object.keys(Blogs).map((slug) => ({
             ...Blogs[slug],
-            content: Blogs[slug].content.substring(0, 360)
         })).slice(offset, offset + limit),
         error: null
     };

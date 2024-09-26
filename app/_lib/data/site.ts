@@ -14,18 +14,17 @@ export const SiteMap = {
             title: "Home"
         },
         blog: {
-            href: "/blog",
+            href: "/me/blog",
             title: "Blog"
         },
         about: {
-            href: "/about",
+            href: "/me/about",
             title: "About"
         },
         projects: {
-            href: "/projects",
+            href: "/me/projects",
             title: "Projects"
-        }
-
+        },
     }
 };
 
@@ -43,13 +42,6 @@ export const Projects = [
         status: "In Progress",
         description: "This is a blog site that uses NextJS and TailwindCSS.",
         link: "https://github.com/helloyork/nomenblog"
-    },
-    {
-        title: "ChatGPT-CLI",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "This is a CLI tool that uses AI to generate text.",
-        link: "https://github.com/helloyork/chatgpt-cmd"
     },
     {
         title: "MewBaka/OtherSidePROJECT",
@@ -79,13 +71,6 @@ export const Projects = [
         description: "Convert Excel files to TypeScript Static Types and Datas",
         link: "https://github.com/helloyork/excel2ts"
     },
-    {
-        title: "helloyork/OtherSideProject-Electron",
-        subtitle: "Electron",
-        status: "Archived",
-        description: "Electron version for OtherSideProject",
-        link: "https://github.com/helloyork/OtherSideProject-Electron"
-    }
 ];
 
 export const nav = [

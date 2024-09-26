@@ -1,4 +1,4 @@
-import { Link } from "@nextui-org/react";
+import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -24,7 +24,7 @@ export default function NavLinks({ nav = _nav, separate = false, wrapper }:
                                     , {
                                         "dark:text-gray-300 text-gray-300 ": isActive,
                                         "dark:text-gray-500 text-gray-300": !isActive
-                                    })} aria-current={isActive ? "page" : undefined} isDisabled={item.disabled || false}>{item.title}</Link>
+                                    })} aria-current={isActive ? "page" : undefined}>{item.title}</Link>
                                 {separate && (index < nav.length - 1) && <span className={clsx(
                                     "mx-2 dark:text-gray-700 select-none text-gray-300",
                                     {

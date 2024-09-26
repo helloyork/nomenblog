@@ -23,6 +23,7 @@ export default function ThemeContextProvider({ children, value = "light" }: Read
                 setTheme(localTheme);
             } else {
                 localStorage.setItem("theme", theme);
+                setTheme(theme);
             }
         }
     }, [theme, value]);
