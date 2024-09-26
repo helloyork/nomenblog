@@ -1,7 +1,7 @@
 "use server";
 
 import { AppRes, AppResStatus } from "./appReq";
-import { Blogs } from "./blogdatas";
+import { Blogs } from "../../blog/content/blogdatas";
 
 export type Blog = {
     title: string;
@@ -17,9 +17,7 @@ export async function getBlogList(offset: number = 0, limit: number = 10): Promi
     };
     return {
         status: "success",
-        data: Object.keys(Blogs).map((slug) => ({
-            ...Blogs[slug],
-        })).slice(offset, offset + limit),
+        data: Blogs,
         error: null
     };
 }
