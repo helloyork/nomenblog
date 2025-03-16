@@ -30,6 +30,20 @@ export const SiteMap = {
 
 export const Projects = [
     {
+        title: "NarraLeaf",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "A new definition of Visual Novel Engine",
+        link: "https://github.com/NarraLeaf/NarraLeaf"
+    },
+    {
+        title: "NarraLeaf-React",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "React-based visual novel framework",
+        link: "https://github.com/NarraLeaf/narraleaf-react"
+    },
+    {
         title: "AIAPA",
         subtitle: "NodeJS",
         status: "Finished",
@@ -49,13 +63,6 @@ export const Projects = [
         status: "In Progress",
         description: "New Otherworldly Adventure Visual Novel powered by Nextron",
         link: "https://github.com/MewBaka/OtherSideProject"
-    },
-    {
-        title: "NarraLeaf-React",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "React-based visual novel framework",
-        link: "https://github.com/helloyork/narraleaf-react"
     },
     {
         title: "@helloyork/CommandParser",
