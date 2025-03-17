@@ -65,10 +65,10 @@ export const Projects = [
         link: "https://github.com/MewBaka/OtherSideProject"
     },
     {
-        title: "@helloyork/CommandParser",
+        title: "CommandParser",
         subtitle: "NodeJS",
         status: "In Progress",
-        description: "parse minecraft-liked command",
+        description: "parse text-based command",
         link: "https://github.com/helloyork/commandparser"
     },
     {
@@ -77,6 +77,27 @@ export const Projects = [
         status: "In Progress",
         description: "Convert Excel files to TypeScript Static Types and Datas",
         link: "https://github.com/helloyork/excel2ts"
+    },
+    {
+        title: "react.narraleaf.com",
+        subtitle: "Nextra",
+        status: "In Progress",
+        description: "Documentation for NarraLeaf-React",
+        link: "https://github.com/NarraLeaf/react.narraleaf.com"
+    },
+    {
+        title: "narraleaf-skeleton",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "NarraLeaf skeleton project generator",
+        link: "https://github.com/NarraLeaf/narraleaf-skeleton"
+    },
+    {
+        title: "oIndex",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "New desktop tool that uses AI to recognize and index files",
+        link: "https://github.com/helloyork/oIndex"
     },
 ];
 
