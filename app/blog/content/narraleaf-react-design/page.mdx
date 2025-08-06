@@ -1,0 +1,104 @@
+---
+title: "Narraleaf React Design"
+date: "2025-08-06"
+description: "NarraLeaf React背后的设计理念"
+---
+
+# NarraLeaf React背后的设计理念
+
+NarraLeaf-React在设计之初就考虑了现有视觉小说引擎的痛点与需求缺口。我注意到大多数视觉小说引擎都有一些问题：
+需要学习新的语言、难以维护和协作，以及较低的可定制性
+
+就Ren'Py举例，内嵌Python语法和语法糖为叙事铺平了道路，允许开发者兼顾可读性和可扩展性。  
+但这也带来了相当多的问题：全局引用污染、编译前类型不严格以及一定的语言学习成本。
+
+同时，Ren'Py的界面使用声明式语法来单独定义每个元素。这可能导致代码难以阅读，产生大量预期之外的布局特性并且可定制性弱。
+
+而NarraLeaf-React从这些痛点出发，尽力构造了一个真正面向开发者的框架。
+
+## 为什么使用TypeScript
+
+TypeScript的优势显而易见。使用TypeScript，我们可以获得JavaScript面向对象设计和模块化设计的全部优势。这些特性使得代码更好管理和协作，成员访问权限明确，并且语言特性和包管理器为其带来极端高的逻辑自由。  
+TypeScript严格的类型检查也杜绝了大部分因为数据操作失误或意外忽略导致的类型错误。
+
+相较于独立的DSL语言，TypeScript（NodeJS）强大的社区生态和包管理器为应用带来更强的功能性支持，而这是大部分视觉小说DSL不具备的。  
+在NarraLeaf-React中，除了与框架交互的接口，剩下的逻辑完全由应用控制。这意味着应用可以自由使用其他库和创造自定义逻辑，而NarraLeaf-React只负责表演的部分。
+
+### 使用JSX
+
+NarraLeaf-React的React部分是使其不同于其他视觉小说引擎的重要部分。通过与React集成，开发者可以直接使用JSX语法来定义界面，自定义样式和掌控整个应用。  
+而使用例如[Tailwind CSS](https://tailwindcss.com/)这样的样式工具库，定义界面变得轻松且易于更改。  
+
+想要更复杂的视觉效果吗？CSS的全部潜力都在开发者手里。基础的效果包括3D效果，复杂渐变和CSS支持的全部样式字段。
+
+而JSX可以帮助开发者创建可重用的强大组件，横跨应用的同时保持样式一致性和可维护性。
+
+在NarraLeaf-React中，和使用DSL来声明元素不同，NarraLeaf-React提供了接口来直接覆写整个组件，并且没有命名约定。
+
+```tsx
+import { Dialog, Texts, Nametag, useGame } from "narraleaf-react";
+
+function GameDialog() {
+    return (
+        <Dialog className="bg-white">
+            <Nametag className="font-bold" />
+            <Texts className="text-lg" />
+        </Dialog>
+    );
+}
+```
+
+随后通过代码接口和钩子就可以轻松地应用组件样式。
+
+同时，HTML结构下，布局和定位都将遵守Web成熟的标准。这意味着意外定位和难以理解的声明式嵌套结构将不服存在。
+
+### 叙事接口
+
+NarraLeaf-React最引以为傲的地方就是它的叙事接口了。经过了数个版本迭代，NarraLeaf-React构建故事的方式变得越来越直观和方便。
+
+```typescript
+scene.action([
+    scene.background.char("/bg_park.png", new Dissolve(500)),
+    
+    "阳光温柔地透过树叶洒落。",
+    "已经早上9点了，不知为何我今天醒来感觉比平时更精神。",
+    
+    Emma.show({ duration: 500 })
+        .char("emma_happy.png"),
+    
+    E`早上好，Alex！`,
+    
+    "一个女孩站在我身边，一如既往地开朗。",
+    "我不知道她是怎么做到的，但Emma似乎总是心情很好。",
+    
+    A`Emma，我告诉过你多少次${b("不要", "#ff0000")}不打招呼就偷偷进我的房间？`,
+    E`你门没关——我怎么能忍住不来呢？`,
+    
+    Menu.prompt("我该怎么办？")
+        .choose("想去吃早餐吗？", [
+            E`真的吗？你终于邀请我出去了？那我们走吧！`,
+        ])
+        .choose("太早了。我们在这里休息一下吧。", [
+            E`唉，你早上总是这么无聊。`,
+            E`不过好吧，我们坐会儿。其实我带了点东西想给你看。`,
+        ]),
+]);
+```
+
+也许这第一眼看过去有些抽象，这是因为接口简化后依旧会受到TypeScript语言限制。
+
+经过抽象的元素接口使用链式调用以省略重复的名字。而标签函数则允许编写者在常规文本中轻松嵌入插值。
+
+而NarraLeaf-React也提供了接口来直接在游戏过程中中执行TypeScript代码。  
+NarraLeaf-React完整的代码支持使得其拥有制作RPG等技术要求更高的游戏。
+
+### 协作
+
+TypeScript将NarraLeaf-React与其他引擎划分的一个重要特性就是其具有真正的商业项目潜力。
+通过CI/CD工具链、Lint工具和真实生态系统集成，NarraLeaf-React项目（或带有该引擎的前端项目）能够遵守严格的组织级开发规范。
+
+## 序列化与游戏流程
+
+由于完全依赖于JavaScript和浏览器环境，NarraLeaf-React的游戏流程系统受到了极大的限制。尽管如此，它还是尽可能简化了这一过程。
+
+### 操作与节点树

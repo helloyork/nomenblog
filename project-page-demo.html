@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Projects Accordion</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #fff;
+      color: #000;
+      font-family: sans-serif;
+      height: 100vh;
+      overflow-y: scroll;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 6rem;
+      font-weight: bold;
+      z-index: 10;
+      background: white;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .spacer {
+      height: 40vh; /* 留白，制造“堆叠在下方”的空间 */
+    }
+
+    .project {
+      position: relative;
+      min-height: 100vh;
+      padding-top: 100px;
+      border-top: 1px solid #000;
+    }
+
+    .project-header {
+      position: sticky;
+      top: 80px; /* 距离页面顶部偏移，模拟堆叠/展开过程 */
+      background: white;
+      padding: 1rem 2rem;
+      font-size: 2rem;
+      font-weight: bold;
+      border: 1px solid #000;
+      z-index: 5;
+    }
+
+    .project-content {
+      padding: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* 模拟隐藏内容开始的视觉折叠 */
+    .project:not(:first-child) .project-content {
+      margin-top: -100px;
+      padding-top: 120px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">PROJECTS</div>
+
+  <div class="spacer"></div>
+
+  <div class="project">
+    <div class="project-header">Project A</div>
+    <div class="project-content">
+      <p>这里是 A 的内容。向下滚动会慢慢展开并带出 Project B。</p>
+      <p>...</p>
+      <p>更多内容可以让滚动持续更久。</p>
+      <p>再往下就是 Project B 的头。</p>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project-header">Project B</div>
+    <div class="project-content">
+      <p>Project B 的正文内容在这里。</p>
+      <p>继续滚动能看到 Project C。</p>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project-header">Project C</div>
+    <div class="project-content">
+      <p>Project C 的内容。</p>
+    </div>
+  </div>
+
+</body>
+</html>

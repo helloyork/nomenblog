@@ -5,7 +5,8 @@ import React from "react";
 import clsx from "clsx";
 import { useTheme } from "@lib/data/theme";
 import Nav from "@lib/elements/navbar";
-import SlideTransition from "./_lib/components/slide-transition";
+import FadeTransition from "./_lib/components/fade-transition";
+
 
 export default function Body({ children }: {
     children: React.ReactNode;
@@ -17,9 +18,9 @@ export default function Body({ children }: {
                 <Nav />
             </div>
             <main className={clsx("text-foreground bg-black", "h-full min-h-screen")}>
-                <SlideTransition>
+                <FadeTransition>
                     {children}
-                </SlideTransition>
+                </FadeTransition>
             </main>
         </>
     );

@@ -2,11 +2,30 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { motion, useAnimation } from "framer-motion";
 import React from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
     const router = useRouter();
+
+    // Animation controls for page slide-out
+    const controls = useAnimation();
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    // Trigger slide-out and navigate after animation
+    const handleNavigate = (href: string) => {
+        if (isNavigating) return;
+        setIsNavigating(true);
+        // Ensure background becomes black while sliding out
+        if (typeof document !== 'undefined') {
+            document.body.style.backgroundColor = '#000';
+        }
+        controls.start({ x: '-100%', transition: { duration: 0.6, ease: 'easeInOut' } })
+            .then(() => {
+                router.push(href, { scroll: false });
+            });
+    }
     
     // Array of words for each page
     const words = useMemo(() => ['Nomen', 'About', 'Projects', 'Blogs'], []);
@@ -213,7 +232,7 @@ export default function Home() {
     }, []);
 
     return (
-        <>
+        <motion.div initial={{ x: 0 }} animate={controls} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
             {/* Global styles for this page */}
             <style jsx global>{`
                 .hidden {
@@ -258,13 +277,13 @@ export default function Home() {
                     className="uppercase absolute text-white font-black whitespace-nowrap leading-tight tracking-tight text-center w-auto left-1/2 transform -translate-x-1/2 z-[2] pointer-events-none"
                     style={{
                         fontSize: 'clamp(60px, 12vw, 200px)',
-                        clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)'
+                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
                     }}
                     onClick={() => {
                         const currentWord = document.getElementById('currentText')?.textContent?.replace(' →', '') || '';
                         const wordIndex = words.indexOf(currentWord);
                         if (wordIndex > 0 && wordLinks[wordIndex]) {
-                            router.push(wordLinks[wordIndex], { scroll: false });
+                            handleNavigate(wordLinks[wordIndex]);
                         }
                     }}
                 >
@@ -277,13 +296,13 @@ export default function Home() {
                     className="uppercase absolute text-black font-black whitespace-nowrap leading-tight tracking-tight text-center w-auto left-1/2 transform -translate-x-1/2 z-[1] pointer-events-auto cursor-pointer"
                     style={{
                         fontSize: 'clamp(60px, 12vw, 200px)',
-                        clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)'
+                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
                     }}
                     onClick={() => {
                         const nextWord = document.getElementById('nextText')?.textContent?.replace(' →', '') || '';
                         const wordIndex = words.indexOf(nextWord);
                         if (wordIndex > 0 && wordLinks[wordIndex]) {
-                            router.push(wordLinks[wordIndex], { scroll: false });
+                            handleNavigate(wordLinks[wordIndex]);
                         }
                     }}
                 >
@@ -337,7 +356,7 @@ export default function Home() {
                     />
                 ))}
             </div>
-        </>
+        </motion.div>
     );
 }
 

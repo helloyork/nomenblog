@@ -57,10 +57,10 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
                         <NavbarMenuItem key={`${item.href}-${index}`}>
                             <Link
                                 className={clsx(
-                                    "w-full",
+                                    "w-full text-white",
                                     {
-                                        " dark:text-primary-300 text-neutral-400": state.path === item.href,
-                                        "dark:text-white text-neutral-600": state.path !== item.href
+                                        "text-white": state.path.startsWith(item.href),
+                                        "text-neutral-400": !state.path.startsWith(item.href)
                                     }
                                 )}
                                 href={item.href}
