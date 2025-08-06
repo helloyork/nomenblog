@@ -6,6 +6,10 @@ description: "NarraLeaf React背后的设计理念"
 
 # NarraLeaf React背后的设计理念
 
+[NarraLeaf-React](https://github.com/NarraLeaf/narraleaf-react)是我从零设计并实现的视觉小说框架。这篇博客会简单讲述两点其设计理念。
+
+> NarraLeaf-React是一个基于React的轻量级视觉小说播放器框架。关于完整的桌面视觉小说应用引擎"NarraLeaf Project"，请参阅[Narraleaf](https://github.com/NarraLeaf/)
+
 NarraLeaf-React在设计之初就考虑了现有视觉小说引擎的痛点与需求缺口。我注意到大多数视觉小说引擎都有一些问题：
 需要学习新的语言、难以维护和协作，以及较低的可定制性
 
@@ -102,3 +106,66 @@ TypeScript将NarraLeaf-React与其他引擎划分的一个重要特性就是其�
 由于完全依赖于JavaScript和浏览器环境，NarraLeaf-React的游戏流程系统受到了极大的限制。尽管如此，它还是尽可能简化了这一过程。
 
 ### 操作与节点树
+
+NarraLeaf-React通过代码接口来建立静态的节点树，然后在进入游戏后执行节点树。而树分叉则是逻辑判断和游戏选项。
+
+这样做的好处是框架可以在不读取脚本文件的情况下静态分析脚本。
+
+不过这意味着代码无法直接使用同步脚本来声明所有游戏过程中才会执行到的步骤，而是需要回调包装。例如，使用`Script`实例来创建自定义代码操作。
+
+不过框架也提供了一些快捷操作，可以以近似同步的语法来创建异步执行的条件语句，例如：  
+```typescript
+scene.action([
+    persis.set("flag", true),
+ 
+    Condition
+        .If(persis.isTrue("flag"), [
+            character1.say("该标志为真")
+        ])
+]);
+```
+
+而节点树的节点，则是动作（`Action`）。大部分的NarraLeaf-React元素都通过接口创建动作。例如，`char.say(something)`会返回一个链式动作。  
+链式动作上可以继续调用其他方法以返回串联的更多动作。
+
+在执行阶段，链式动作会被还原为同样顺序的多个动作。
+
+### StackModel与Timeline模型
+
+NarraLeaf-React在最初的设计中使用一个单一的引用来指向当前正在执行的节点。而后，随着需求扩张，这个方法很快就过时了。
+
+游戏中，当执行嵌套的操作时，当前节点的引用会指向嵌套内的节点。但在此时进行序列化，则会丢失嵌套外的操作。
+
+因此，NarraLeaf-React使用`Timeline`作为操作原子包装器，以及`StackModel`作为时间线管理器。这个组合允许游戏从任何正在执行的步骤中序列化和反序列化。
+
+详细来讲，`Timeline`是一组按顺序执行的步骤或子时间线，在所有操作完成后解析。`StackModel`包含了多个`Timeline`或子栈模型。  
+`StackModel`可以是`all`模式，即等待全部执行，也可以是`any`模型，即等待任意元素完成。在序列化时，游戏会从根栈模型向下请求序列化。
+栈模型会返回序列化的`Action`标识符或已序列化的`StackModel`。如果当前操作是异步操作并且无法从中断操作中完全恢复，`StackModel`会抛弃这个步骤，
+转而回滚到上一个步骤并且储存当前异步操作的标识符。
+
+在反序列化时，所有的`StackModel`都会反序列化，每一个元素都会通过标识符还原到元素实例（这通过扫描节点树完成），并且从最后一个元素标识符开始执行。  
+游离的`StackModel`，也就是不处于任何一个根栈模型的子级的栈模型，会被单独序列化和反序列化。
+
+这些机制允许NarraLeaf-React摆脱Promise的限制，建立一个强大且统一的游戏流程模型。
+
+有关游戏流程的详细解析，请访问[DeepWiki](https://deepwiki.com/NarraLeaf/narraleaf-react)
+
+## 未来方向
+
+为了降低开发门槛和提供更完整的编辑支持，NarraLeaf引擎正在全力开发中。NarraLeaf是完整的桌面视觉小说应用解决方案，通过跨平台桌面技术来帮助简化游戏分发流程。
+
+同时，NarraLeaf-React会不断优化模板系统和插件系统，以允许社区对播放器进行更自由的定制。
+
+包含在NarraLeaf Project中并且正在规划的项目包括：
+
+- NarraLang
+- NarraUI
+- NarraLeaf Editor
+- NarraLang VSCode Extension
+
+## 总结
+
+NarraLeaf-React通过类型安全、IDE 支持和与 CI/CD 流程的无缝集成，为更智能的开发提供动力。其完全可定制的界面和组件化结构允许开发者就像构建现代化Web应用一样创建视觉小说。  
+而其可扩展性和无语言依赖性允许开发者使用强大的逻辑和真实生态系统。
+
+有关该框架的更多信息，请访问[react.narraleaf.com](https://react.narraleaf.com/)

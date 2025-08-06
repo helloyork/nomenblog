@@ -38,10 +38,38 @@ export const Projects = [
     },
     {
         title: "NarraLeaf-React",
-        subtitle: "NodeJS",
+        subtitle: "React",
         status: "In Progress",
         description: "React-based visual novel framework",
         link: "https://github.com/NarraLeaf/narraleaf-react"
+    },
+    {
+        title: "NarraLang",
+        subtitle: "NodeJS",
+        status: "In Progress",
+        description: "NarraLeaf's own programming language",
+        link: "https://github.com/NarraLeaf/NarraLang"
+    },
+    {
+        title: "NarraUI",
+        subtitle: "React",
+        status: "Planning",
+        description: "NarraLeaf's UI framework",
+        link: "https://github.com/NarraLeaf/NarraUI"
+    },
+    {
+        title: "NarraLeaf Editor",
+        subtitle: "React",
+        status: "Planning",
+        description: "NarraLeaf Visual Novel Editor",
+        link: "https://github.com/NarraLeaf/NarraLeaf-Editor"
+    },
+    {
+        title: "NarraLang VSCode Extension",
+        subtitle: "React",
+        status: "Planning",
+        description: "NarraLang VSCode Extension",
+        link: "https://github.com/NarraLeaf"
     },
     {
         title: "AIAPA",
@@ -51,25 +79,11 @@ export const Projects = [
         link: "https://github.com/helloyork/aiapa",
     },
     {
-        title: "NomenBlog",
-        subtitle: "NextJS",
-        status: "In Progress",
-        description: "This is a blog site that uses NextJS and TailwindCSS.",
-        link: "https://github.com/helloyork/nomenblog"
-    },
-    {
         title: "MewBaka/OtherSidePROJECT",
         subtitle: "Nextron",
         status: "In Progress",
         description: "New Otherworldly Adventure Visual Novel powered by Nextron",
         link: "https://github.com/MewBaka/OtherSideProject"
-    },
-    {
-        title: "CommandParser",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "parse text-based command",
-        link: "https://github.com/helloyork/commandparser"
     },
     {
         title: "excel2ts",
@@ -84,13 +98,6 @@ export const Projects = [
         status: "In Progress",
         description: "Documentation for NarraLeaf-React",
         link: "https://github.com/NarraLeaf/react.narraleaf.com"
-    },
-    {
-        title: "narraleaf-skeleton",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "NarraLeaf skeleton project generator",
-        link: "https://github.com/NarraLeaf/narraleaf-skeleton"
     },
     {
         title: "oIndex",
