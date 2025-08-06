@@ -28,7 +28,7 @@ export default function RootLayout({
             <body className={
                 clsx(
                     inter.className,
-                    "h-full min-h-screen bg-white dark:bg-primary-500 dark:text-primary-100 transition-colors duration-200 ease-in-out",
+                    "h-full min-h-screen bg-black dark:text-primary-100 transition-colors duration-200 ease-in-out overflow-x-hidden",
                 )
             }>
                 <Analytics />

@@ -21,9 +21,10 @@ function FrozenRouter(props: { children: React.ReactNode }) {
 }
 
 const defaultVariants = {
-  hidden: { opacity: 0, scale: 0.98 },
-  enter: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.98 },
+  // Fade only, no scaling to avoid visual displacement on initial load
+  hidden: { opacity: 0 },
+  enter: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 const FadeTransition = ({ children, variants }: { children: React.ReactNode, variants?: any }) => {

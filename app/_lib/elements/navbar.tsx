@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 import Logo from "../components/logo";
 import { nav } from "@lib/data/site";
@@ -11,36 +11,16 @@ import { SiteMap } from "@lib/data/site";
 import { useTheme } from "@lib/data/theme";
 
 import NavLinks from "@lib/components/navlinks";
-import FadeTransition from "../components/fade-transition";
 import { motion } from "framer-motion";
 
 
 export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
-    const [_isOnTop, _setIsOnTop] = React.useState(true);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const state = {
         path: usePathname(),
         theme: useTheme().theme,
-        getIsOnTop: () => _isOnTop,
     };
-    const controller = {
-        setIsOnTop: _setIsOnTop
-    };
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 0) {
-                controller.setIsOnTop(false);
-            } else {
-                controller.setIsOnTop(true);
-            }
-        };
-        window.addEventListener("scroll", handleScroll);
-        handleScroll();
-        return () => window.removeEventListener("scroll", handleScroll);
-    });
-
 
     return (
         <motion.div
@@ -56,11 +36,7 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
         >
             <Navbar className={clsx({
                 "hidden": state.path === SiteMap.route.home.href
-            }, {
-                "bg-white dark:bg-transparent": state.getIsOnTop(),
-            }, "transition-color fixed z-10", {
-                "dark": state.theme === "dark",
-            })} onMenuOpenChange={setIsMenuOpen} id="navbar" isBordered={!state.getIsOnTop()}>
+            }, "bg-transparent fixed z-10")} onMenuOpenChange={setIsMenuOpen} id="navbar">
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="sm:hidden"

@@ -26,7 +26,7 @@ const nextUIConfig: NextUIPluginConfig = {
         },
         dark: {
             colors: {
-                background: "#141414",
+                background: "#000",
                 primary: {
                     100: "#F3F3F3",
                     200: "#E7E7E7",

@@ -17,7 +17,7 @@ export default function NavLinks({ nav = _nav, separate = false, wrapper }:
                     <React.Fragment key={index}>{(function () {
                         let content = (
                             <>
-                                <Link href={item.href} className={clsx(" transition-all group rounded-lg  mx-2",
+                                <Link href={item.href} scroll={false} className={clsx(" transition-all group rounded-lg  mx-2",
                                     `dark:hover:text-gray-300 dark:text-gray-500
                                 hover:text-gray-300
                                  select-none`

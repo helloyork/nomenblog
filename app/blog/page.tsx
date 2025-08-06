@@ -9,7 +9,7 @@ export default async function Page() {
     return (
         <>
             <Title title="Blogs" subtitle="My Blogs" />
-            <div className="text-left dark:bg-transparent bg-white">
+            <div className="text-left bg-black text-white">
                 <Suspense fallback={<div>Loading...</div>}>
                     <BlogDrawer />
                 </Suspense>
