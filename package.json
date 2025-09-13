@@ -27,6 +27,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.6.1",
+    "mermaid": "^10.9.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-frontmatter": "^5.0.0",
