@@ -2,9 +2,13 @@ import { JSX, ClassAttributes, HTMLAttributes } from "react";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import dynamic from 'next/dynamic';
+import React from 'react';
 
 // Dynamically import MermaidChart with no SSR to avoid window undefined errors
-const MermaidChart = dynamic(() => import('./mermaid-chart'), { ssr: false });
+const MermaidChart = dynamic(() => import('./mermaid-chart'), {
+    ssr: false,
+    loading: () => <div className="my-6 text-gray-400">Loading diagram...</div>,
+});
 
 type Props = JSX.IntrinsicAttributes;
 
@@ -45,23 +49,35 @@ const MDXComponents = {
         <blockquote className="border-l-4 border-gray-400 pl-4 my-4 italic text-gray-400 bg-gray-900/50 py-2 rounded-r" {...props} />,
     pre: (props: any) => {
         // Extract language from className if present
-        const children = props.children;
-        let codeElement = children?.props?.children;
-        if (Array.isArray(codeElement)) {
-            codeElement = codeElement.join('');
-        }
-        const className = children?.props?.className || '';
+        const extractText = (node: any): string => {
+            if (typeof node === 'string') return node;
+            if (Array.isArray(node)) return node.map(extractText).join('');
+            if (React.isValidElement(node)) {
+                // props may be unknown
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                const childrenAny = (node as any).props?.children;
+                return extractText(childrenAny);
+            }
+            return '';
+        };
+
+        const codeElementRaw = props.children?.props?.children;
+        const codeText = extractText(codeElementRaw);
+        const className = props.children?.props?.className || '';
         const language = className.replace('language-', '') || 'text';
         
-        if (typeof codeElement === 'string') {
-            // If the language is mermaid we should render a MermaidChart component instead of a code block
-            if (language === 'mermaid') {
+        // Mermaid handling first to avoid Prism rendering interference
+        if (language === 'mermaid') {
+            if (codeText) {
                 return (
                     <div className="my-6">
-                        <MermaidChart chart={codeElement.trim()} />
+                        <MermaidChart chart={codeText.trim()} />
                     </div>
                 );
             }
+        }
+
+        if (typeof codeText === 'string') {
             return (
                 <div className="my-6">
                     <SyntaxHighlighter
@@ -74,19 +90,14 @@ const MDXComponents = {
                         }}
                         {...props}
                     >
-                        {codeElement}
+                        {codeText}
                     </SyntaxHighlighter>
                 </div>
             );
-        } else if (language === 'mermaid' && codeElement) {
-            // cover case where codeElement is not plain string
-            return (
-                <div className="my-6">
-                    <MermaidChart chart={String(codeElement).trim()} />
-                </div>
-            );
         }
-        return <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6 border border-gray-700" {...props} />;
+        return (
+            <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6 border border-gray-700" {...props} />
+        );
     },
     inlineCode: (props: Props) => 
         <code className="bg-gray-800 text-gray-100 rounded px-1 py-0.5 text-sm font-mono" {...props} />,
