@@ -46,7 +46,10 @@ const MDXComponents = {
     pre: (props: any) => {
         // Extract language from className if present
         const children = props.children;
-        const codeElement = children?.props?.children;
+        let codeElement = children?.props?.children;
+        if (Array.isArray(codeElement)) {
+            codeElement = codeElement.join('');
+        }
         const className = children?.props?.className || '';
         const language = className.replace('language-', '') || 'text';
         
@@ -73,6 +76,13 @@ const MDXComponents = {
                     >
                         {codeElement}
                     </SyntaxHighlighter>
+                </div>
+            );
+        } else if (language === 'mermaid' && codeElement) {
+            // cover case where codeElement is not plain string
+            return (
+                <div className="my-6">
+                    <MermaidChart chart={String(codeElement).trim()} />
                 </div>
             );
         }

@@ -132,6 +132,16 @@ sequenceDiagram
     Note right of Engine: 继续执行后续流程
 ```
 
+而栈看起来像是：  
+```mermaid
+flowchart TD
+    A[栈: action1] -->|执行 action1 返回 action2| B[栈: action2]
+    B -->|执行 action2 返回 StackModel: action-2a, action-2b + action3| C[栈: action-2a, action-2b, action3]
+    C -->|执行 action-2a| D[栈: action-2b, action3]
+    D -->|执行 action-2b| E[栈: action3]
+    E -->|执行 action3| F[栈: 空]
+```
+
 这意味着操作可以返回某组连续节点的第一个节点，栈会自动执行那组节点，并且在结束后回归上一层栈。这个设计让游戏无需再变更任何
 节点数据以做到栈回归。
 
