@@ -1,6 +1,10 @@
 import { JSX, ClassAttributes, HTMLAttributes } from "react";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import dynamic from 'next/dynamic';
+
+// Dynamically import MermaidChart with no SSR to avoid window undefined errors
+const MermaidChart = dynamic(() => import('./mermaid-chart'), { ssr: false });
 
 type Props = JSX.IntrinsicAttributes;
 
@@ -47,6 +51,14 @@ const MDXComponents = {
         const language = className.replace('language-', '') || 'text';
         
         if (typeof codeElement === 'string') {
+            // If the language is mermaid we should render a MermaidChart component instead of a code block
+            if (language === 'mermaid') {
+                return (
+                    <div className="my-6">
+                        <MermaidChart chart={codeElement.trim()} />
+                    </div>
+                );
+            }
             return (
                 <div className="my-6">
                     <SyntaxHighlighter

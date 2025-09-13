@@ -3,6 +3,8 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import BlogTitleSetter from './blog-title-setter';
+import { MDXProvider } from '@mdx-js/react';
+import MDXComponents from '../../_lib/components/mdx-components';
 
 interface BlogData {
     title: string;
@@ -30,7 +32,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     return (
         <div className="max-w-screen-lg mx-auto">
             <BlogTitleSetter blogData={blogData} />
-            {children}
+            <MDXProvider components={MDXComponents}>
+                {children}
+            </MDXProvider>
         </div>
     );
 }

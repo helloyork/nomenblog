@@ -8,7 +8,9 @@ description: "Stack Model Explained"
 
 ## 引言
 
-StackModel是我为NarraLeaf-React设计的一个游戏流程执行模型，提供了一个复杂的基于栈的架构，用于管理复杂的叙事操作、状态持久化和异步执行流程。
+StackModel 是为 NarraLeaf-React 设计的一套以栈为中心的执行模型。它统一管理嵌套剧情、异步任务与状态序列化
+，从根本上解决了传统“单节点”执行模型在支线、嵌套和存档恢复上的不足。本文将说明为什么需要 StackModel、其核心
+概念（Awaitable、Timeline、栈循环）、以及实现要点与常见陷阱。
 
 有关于NarraLeaf-React视觉小说框架，请参考[NarraLeaf-React](https://react.narraleaf.com/). 
 
@@ -101,9 +103,79 @@ StackModel是一组以栈形式储存的Awaitable和节点。
 - 如果栈已空，退出循环并且交给游戏决定下一步操作
 - 取出栈顶
   - 如果栈顶是可执行的节点，则执行该节点，将执行结果推入栈
+  - 如果栈顶是包含未执行的StackModel的可执行节点，则执行其指向的StackModel
   - 如果栈顶是已解析的Awaitable，将结果推入栈
+    - 如果没有任何结果返回，什么都不会发生
   - 如果栈顶是未解析的Awaitable，返回Awaitable供调用者监听任务执行状态
 
-而执行子Stack Model的支持则通过将StackModel执行包装为Awaitable实现。StackModel无需关心子StackModel的执行状态。
+```mermaid
+sequenceDiagram
+    participant Stack as 栈
+    participant Engine as 引擎
 
-当操作想要执行
+    Engine->>Stack: 初始栈 [action1]
+    Engine->>Stack: pop action1 执行
+    Note right of Engine: action1 返回 action2
+    Engine->>Stack: push action2
+
+    Engine->>Stack: pop action2 执行
+    Note right of Engine: action2 返回 StackModel[action-2a, action-2b] + action3
+    Engine->>Stack: push action3
+    Engine->>Stack: push action-2b
+    Engine->>Stack: push action-2a
+
+    Engine->>Stack: pop action-2a 执行完毕
+    Engine->>Stack: pop action-2b 执行完毕
+    Note right of Engine: StackModel完成
+
+    Engine->>Stack: pop action3 执行
+    Note right of Engine: 继续执行后续流程
+```
+
+这意味着操作可以返回某组连续节点的第一个节点，栈会自动执行那组节点，并且在结束后回归上一层栈。这个设计让游戏无需再变更任何
+节点数据以做到栈回归。
+
+操作使用StackModel来管理任务很简单。当操作返回下一个节点时，可以返回一个StackModel的初始化参数以及下一个节点，也可以返回
+一组带有执行父子关系的节点。  
+
+当返回StackModel初始化参数和下一个节点时，一个新的StackModel会被初始化和执行，执行完成后下一个节点会被推入栈。  
+当返回一组操作时，操作会正向遍历并且推入栈。这意味着操作返回的每个操作都是一组节点序列的开头。每个节点序列都会按照推入顺序
+的反方向执行。
+
+当场景跳转时，主StackModel会清空，以免任何来自其他场景的操作意外执行。
+
+### 序列化和反序列化
+
+上文曾提到过StackModel的核心设计之一就是“尝试性的操作执行”。
+
+在JavaScript执行环境中，我们无法得知任何Promise的内部状态，除非其主动报告。我们也无法直接中止某个Promise的执行。  
+由于语言限制，我们需要做一些取舍：抛弃部分异步执行结果并且返回到一个稳定的时刻。
+
+当序列化游戏时，游戏会序列化所有注册的StackModel。
+
+StackModel序列化时，会按照以下流程执行：  
+- 如果栈顶是一个正在执行的StackModel，则序列化StackModel并将其数据储存和子节点在内包含在序列化后的栈上
+- 如果栈顶是一个未解析的Awaitable，不储存这个Awaitable
+- 如果栈顶是一个节点，储存该节点的ID
+
+在反序列化时，游戏会将序列化的栈中的所有元素反序列化：  
+- 当遇到节点，从已经构建完成的静态脚本树中查找该节点的实例并且替换
+- 当遇到StackModel数据，使用这个数据构建一个新的StackModel和子节点引用
+
+任何独立的异步执行的StackModel也遵循同样的流程。
+
+### 历史管理
+
+由于栈通常不会很深，因此序列化和反序列化StackModel并不会产生较大的性能影响。因此，游戏在每个操作执行时，都会推入一个StackModel快照。
+
+游戏状态是通过记录状态增量或使用清理函数来实现的。当回溯到某个时刻时，在那个时刻之前的清理函数会执行，并且将涉及到的StackModel通过快照还原。
+
+## 未来方向
+
+尽管StackModel是一个足够合理的解决方案，但它依旧存在很多缺陷。
+
+例如，StackModel的错误处理依赖游戏上下文，缺少足够的方案来处理或允许开发者处理节点执行错误。  
+同时，StackModel的序列化和反序列化依赖于静态节点树特性，这意味着对脚本的任何更改都会导致存档完全不兼容。  
+又或者，StackModel的并发控制过于简单，可能无法处理过于复杂的游戏逻辑。
+
+这些问题都需要深入的研究和实验才能得到解决方法，但这将会是NarraLeaf-React努力的目标！
