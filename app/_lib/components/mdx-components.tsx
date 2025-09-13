@@ -54,7 +54,6 @@ const MDXComponents = {
             if (Array.isArray(node)) return node.map(extractText).join('');
             if (React.isValidElement(node)) {
                 // props may be unknown
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
                 const childrenAny = (node as any).props?.children;
                 return extractText(childrenAny);
             }
