@@ -106,6 +106,13 @@ export const Projects = [
         description: "New desktop tool that uses AI to recognize and index files",
         link: "https://github.com/helloyork/oIndex"
     },
+    {
+        title: "MORE",
+        subtitle: "",
+        status: "",
+        description: "Contact me and make something cool together!",
+        link: "/about"
+    },
 ];
 
 export const nav = [
