@@ -63,4 +63,13 @@ body {
     overflow-wrap: break-word;
     hyphens: auto;
   }
+
+  /* Hide scrollbar for scroll list */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+  }
 }
