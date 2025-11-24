@@ -44,6 +44,25 @@ export const Projects = [
         link: "https://github.com/NarraLeaf/narraleaf-react"
     },
     {
+        title: "NarraLeaf Studio",
+        subtitle: "Electron",
+        status: "In Progress",
+        description: "A zero-code, all-in-one visual novel IDE.",
+        link: "https://github.com/NarraLeaf/NarraLeaf-Studio"
+    },{
+        title: "@NarraLeaf/CharPack",
+        subtitle: "NodeJS",
+        status: "Finished",
+        description: "Image compression tool for optimizing character assets",
+        link: "https://github.com/NarraLeaf/CharPack"
+    },{
+        title: "@NarraLeaf/Sound",
+        subtitle: "JavaScript",
+        status: "In Progress",
+        description: "A lightweight and modern HTML audio management solution, suitable for simple web games.",
+        link: "https://github.com/NarraLeaf/Sound"
+    },
+    {
         title: "NarraLang",
         subtitle: "NodeJS",
         status: "In Progress",
@@ -56,13 +75,6 @@ export const Projects = [
         status: "Planning",
         description: "NarraLeaf's UI framework",
         link: "https://github.com/NarraLeaf/NarraUI"
-    },
-    {
-        title: "NarraLeaf Editor",
-        subtitle: "React",
-        status: "Planning",
-        description: "NarraLeaf Visual Novel Editor",
-        link: "https://github.com/NarraLeaf/NarraLeaf-Editor"
     },
     {
         title: "NarraLang VSCode Extension",
@@ -79,13 +91,6 @@ export const Projects = [
         link: "https://github.com/helloyork/aiapa",
     },
     {
-        title: "MewBaka/OtherSidePROJECT",
-        subtitle: "Nextron",
-        status: "In Progress",
-        description: "New Otherworldly Adventure Visual Novel powered by Nextron",
-        link: "https://github.com/MewBaka/OtherSideProject"
-    },
-    {
         title: "excel2ts",
         subtitle: "NodeJS",
         status: "In Progress",
@@ -98,13 +103,6 @@ export const Projects = [
         status: "In Progress",
         description: "Documentation for NarraLeaf-React",
         link: "https://github.com/NarraLeaf/react.narraleaf.com"
-    },
-    {
-        title: "oIndex",
-        subtitle: "NodeJS",
-        status: "In Progress",
-        description: "New desktop tool that uses AI to recognize and index files",
-        link: "https://github.com/helloyork/oIndex"
     },
     {
         title: "MORE",
