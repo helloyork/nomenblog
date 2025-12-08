@@ -4,8 +4,8 @@ import { Prism } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import dynamic from 'next/dynamic';
 
-// Cast to ComponentType to satisfy JSX typing from react-syntax-highlighter.
-const SyntaxHighlighter = Prism as React.ComponentType<SyntaxHighlighterProps>;
+// Cast through unknown to satisfy JSX typing from react-syntax-highlighter.
+const SyntaxHighlighter = Prism as unknown as React.ComponentType<SyntaxHighlighterProps>;
 
 // Dynamically import MermaidChart with no SSR to avoid window undefined errors
 const MermaidChart = dynamic(() => import('./mermaid-chart'), {
