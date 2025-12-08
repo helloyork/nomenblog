@@ -14,6 +14,7 @@ import { Providers } from "./providers";
 import EasterEgg from "./_lib/components/easter-egg";
 import Body from "./body";
 import { Analytics } from "@vercel/analytics/react"
+import { EasterExperienceProvider } from "./_lib/data/easter-experience";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,10 +35,12 @@ export default function RootLayout({
             }>
                 <Analytics />
                 <Providers>
-                    <EasterEgg />
-                    <Body>
-                        {children}
-                    </Body>
+                    <EasterExperienceProvider>
+                        <EasterEgg />
+                        <Body>
+                            {children}
+                        </Body>
+                    </EasterExperienceProvider>
                 </Providers>
             </body>
         </html>

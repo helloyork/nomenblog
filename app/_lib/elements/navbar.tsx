@@ -12,10 +12,19 @@ import { useTheme } from "@lib/data/theme";
 
 import NavLinks from "@lib/components/navlinks";
 import { motion } from "framer-motion";
+import { useEasterExperience } from "../data/easter-experience";
 
 
 export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const { unlocked } = useEasterExperience();
+    const navItems = React.useMemo(() => {
+        if (!unlocked) return nav;
+        return [
+            ...nav,
+            { title: "🍎", href: "/bad-apple" },
+        ];
+    }, [unlocked]);
 
     const state = {
         path: usePathname(),
@@ -45,7 +54,7 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
                     <Link href={SiteMap.route.home.href}><Logo light={false} className={" min-h-10 w-24 h-24"} /></Link>
                 </NavbarBrand>)}
                 <NavbarContent className="hidden sm:flex gap-4 justify-items-center" justify="center">
-                    <NavLinks wrapper={(node) => (<NavbarItem>{node}</NavbarItem>)} />
+                    <NavLinks nav={navItems} wrapper={(node) => (<NavbarItem>{node}</NavbarItem>)} />
                 </NavbarContent>
                 <NavbarMenu className={clsx(
                     {
@@ -53,7 +62,7 @@ export default function Nav({ showLogo = false }: { showLogo?: boolean } = {}) {
                     },
                     "m-8"
                 )}>
-                    {nav.map((item, index) => (
+                    {navItems.map((item, index) => (
                         <NavbarMenuItem key={`${item.href}-${index}`}>
                             <Link
                                 className={clsx(

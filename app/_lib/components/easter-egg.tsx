@@ -7,6 +7,7 @@ import FloatingTriangles from "./FloatingTriangles";
 import CursorTrail from "./CursorTrail";
 import PlanaViewer from "./PlanaViewer";
 import EasterEnterLoading from "./EasterEnterLoading";
+import { useEasterExperience } from "../data/easter-experience";
 
 // Easter egg: type the secret sequence to enter a loading scene,
 // then reveal the PLANA Spine model with simple overlay effects.
@@ -30,6 +31,8 @@ const EasterEgg: React.FC = () => {
     const timersRef = useRef<{ progress?: NodeJS.Timeout; toReady?: NodeJS.Timeout }>({});
     const startTimeRef = useRef<number>(0);
     const finishedRef = useRef(false);
+    const hasMarkedRef = useRef(false);
+    const { markUnlocked } = useEasterExperience();
 
     const stopTimers = useCallback(() => {
         if (timersRef.current.progress) {
@@ -122,6 +125,13 @@ const EasterEgg: React.FC = () => {
             finishLoading();
         }, delay);
     }, [finishLoading]);
+
+    useEffect(() => {
+        if (stage === "ready" && !hasMarkedRef.current) {
+            hasMarkedRef.current = true;
+            markUnlocked();
+        }
+    }, [stage, markUnlocked]);
 
     // Hat cursor follower; do not hide system cursor
     useEffect(() => {
