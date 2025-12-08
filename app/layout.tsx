@@ -11,6 +11,7 @@ import { meta } from "./_lib/data/site";
 import React from "react";
 import clsx from "clsx";
 import { Providers } from "./providers";
+import EasterEgg from "./_lib/components/easter-egg";
 import Body from "./body";
 import { Analytics } from "@vercel/analytics/react"
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             }>
                 <Analytics />
                 <Providers>
+                    <EasterEgg />
                     <Body>
                         {children}
                     </Body>

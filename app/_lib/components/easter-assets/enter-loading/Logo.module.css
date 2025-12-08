@@ -1,0 +1,27 @@
+.iconPink {
+    width: 300px;
+    height: 300px;
+    background-color: #ffc0d836;
+    -webkit-mask-image: url('/img/Tran_Shitim_Icon.png');
+    mask-image: url('/img/Tran_Shitim_Icon.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+} 
+
+.icon {
+    width: 300px;
+    height: 300px;
+    -webkit-mask-image: url('/img/Tran_Shitim_Icon.png');
+    mask-image: url('/img/Tran_Shitim_Icon.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+

@@ -69,7 +69,67 @@ body {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
   }
-  .scrollbar-hide::-webkit-scrollbar { 
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
+  }
+
+  /* Easter egg cursor hide - force hide system cursor */
+  .easter-egg-active,
+  .easter-egg-active * {
+    cursor: none !important;
+  }
+
+  /* Character breathing glow (aligned with original desk Avatar) */
+  :root {
+    --character-glow-primary: rgba(248, 212, 255, 0.4);
+    --character-glow-secondary: rgba(248, 212, 255, 0.2);
+    --character-glow-dim: rgba(248, 212, 255, 0.1);
+    /* Preserve legacy variable names used by the desk project */
+    --character-glow-color-primary: var(--character-glow-primary);
+    --character-glow-color-secondary: var(--character-glow-secondary);
+    --character-glow-color-dim: var(--character-glow-dim);
+  }
+
+  .character-glow {
+    position: relative;
+    filter: drop-shadow(0 0 8px var(--character-glow-color-primary)) 
+            drop-shadow(0 0 16px var(--character-glow-color-secondary));
+    overflow: visible;
+    animation: character-glow-pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes character-glow-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 0 8px var(--character-glow-color-dim)) 
+              drop-shadow(0 0 16px var(--character-glow-color-dim));
+    }
+    50% {
+      filter: drop-shadow(0 0 12px var(--character-glow-color-primary)) 
+              drop-shadow(0 0 24px var(--character-glow-color-secondary));
+    }
+  }
+
+  /* Edge breathing gradient frame */
+  @keyframes edge-breath {
+    0%   { opacity: 0.18; }
+    50%  { opacity: 0.32; }
+    100% { opacity: 0.18; }
+  }
+
+  .edge-breath-frame {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9996;
+    background: linear-gradient(120deg, rgba(255, 105, 180, 0.5), rgba(105, 180, 255, 0.5)),
+                linear-gradient(300deg, rgba(120, 255, 214, 0.35), rgba(255, 255, 255, 0.2));
+    background-blend-mode: screen;
+    mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    mask-size: calc(100% - 12px) calc(100% - 12px), 100% 100%;
+    mask-composite: exclude;
+    -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    -webkit-mask-size: calc(100% - 12px) calc(100% - 12px), 100% 100%;
+    -webkit-mask-composite: xor;
+    animation: edge-breath 4.5s ease-in-out infinite;
   }
 }
