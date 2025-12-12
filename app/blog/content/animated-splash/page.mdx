@@ -1,0 +1,83 @@
+---
+title: "Play Animation Before Windows Startup"
+date: "2025-12-12"
+description: "Playing Animation on EFI Startup Explained"
+---
+
+# 在Windows启动前播放动画
+
+作为一名Windows用户，定制Windows系统是我在拿到新电脑后就会做的事情。然而，厂商们为电脑编写的启动动画显得无聊乏味。
+
+因此，我驱动AI帮助我制作了一个用于在启动Windows前播放动画的工具。
+
+## AnimeBoot
+
+[AnimeBoot](https://github.com/helloyork/AnimeBoot)包含了EFI程序的源代码、安装脚本和一些媒体处理脚本。
+
+在Windows真正启动之前，主板会播放BIOS/UEFI Logo。而AnimeBoot的原理是将一个自制的UEFI程序作为启动链的一部分，并且在
+启动Windows之前将动画逐帧刷入屏幕。
+
+### 加载链
+
+UEFI的启动分为多个阶段，通常是：  
+```
+UEFI Firmware → Firmware Boot Manager → Boot Options → EFI Applications → OS Loader
+```
+
+AnimeBoot通过修改固件的启动顺序，将自己插入到加载链中的关键位置。
+
+标准Windows启动链：  
+```
+UEFI Firmware → Windows Boot Manager (bootmgfw.efi) → BCD配置 → winload.efi → 内核
+```
+
+AnimeBoot修改后的启动链：  
+```
+UEFI Firmware → AnimeBoot.efi → Windows Boot Manager (bootmgfw.efi) → BCD配置 → winload.efi → 内核
+```
+
+由于UEFI通常存在安全启动等限制，阻止没有签名的UEFI程序启动。因此，AnimeBoot使用了[Shim 引导](https://github.com/Metabolix/HackBGRT/blob/main/shim.md)
+来完成程序启动。
+
+当UEFI尝试启动`AnimeBoot.efi`时，这个EFI文件实际上是已经签名好的`shimx64.efi`。随后，Shim会尝试启动`grubx64.efi`。
+但此时，`grubx64.efi`已经被我们的自定义启动，也就是真正的AnimeBoot所替换。当`grubx64.efi`被发现不可信任时，Shim会启动
+MOKManager进行签名管理。
+
+通过这个流程，即时UEFI程序没有签名，也可以通过MOKManager进行信任。
+
+### 图形输出
+
+然而，UEFI环境并没有启动后的Windows系统那么丰富。在UEFI环境中，程序拥有的就只是硬件和很少的文件系统支持。
+
+没有Win32，没有DirectX。要在屏幕上绘图，程序需要依赖[GOP协议](https://wiki.osdev.org/GOP)。
+
+GOP (Graphics Output Protocol) 是 UEFI 规范中的一个核心协议，专门用于图形输出设备的管理和控制。它提供统一的图形硬
+件抽象接口
+
+通过GOP协议，程序可以高效地清除厂商Logo和写入自己的图片。
+
+但问题来了，UEFI环境中并没有解析视频和动图的能力。跨平台播放视频和使用具有压缩算法的图片似乎已经成为了理所当然。
+然而，包括解析MP4视频，甚至是使用PNG、JPG等图片格式，都需要对应的解码器。
+
+ESP分区通常只有100~260MB的大小，UEFI 驱动或早期 Bootloader 通常也受 Flash/NVRAM 容量限制，无法容纳解码 H.264/H.265
+等复杂编解码库。同时，启动阶段 CPU 尚未启用分页、浮点指令或 SIMD 优化，性能远低于完全启动后的系统。MP4 解码需要大量
+内存与算力，不适合此阶段。并且，UEFI GOP 只提供 Framebuffer 的基本写入功能，没有视频加速。这意味着启动环境对于复杂
+计算都将相当受限。
+
+因此，直接在启动阶段播放MP4视频并不现实。
+
+AnimeBoot使用的策略是将视频或动图逐帧转换为BMP位图。使用GOP协议刷写BMP到屏幕上更为轻松。
+
+当然，代价就是视频和动图的体积会膨胀10倍甚至是100倍。通过限制帧率和尺寸，动画可以更长。
+
+将一份400x600像素的动图转换为24帧的动画序列后，`.anim`文件，AnimeBoot的自定义文件格式，会从7MB的`.gif`体积膨胀到
+100MB左右。
+
+## 这带来了什么
+
+AnimeBoot本身很简单，但这背后是我十个小时的对UEFI环境的摸索。通过AnimeBoot，我用于能够替换厂商的启动Logo，从而实现
+更深度的系统定制。
+
+在目前看来，篡改Windows Boot Manager从而实现边启动边播放动画并不现实，因为这受限于破解技术与系统安全性。
+
+这个项目展示了UEFI生态系统的强大能力，将原本单调的启动过程转变为个性化的视觉体验，同时保持了系统稳定性和安全性。
