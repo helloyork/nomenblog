@@ -54,7 +54,7 @@ export const Projects = [
         title: "Wayfo",
         subtitle: "NodeJS",
         status: "Finished",
-        description: "By seamlessly connecting to two major e-commerce platforms, Amazon and Wayfair, through automated tools, users can efficiently migrate and optimize home furnishing product data, achieving end-to-end automation from data collection to product listing.",
+        description: "Automates the full workflow of migrating home‑goods product data from Amazon to Wayfair, from data extraction to transformation and listing.",
         link: "https://github.com/helloyork/wayfo"
     },
     {
