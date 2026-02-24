@@ -49,7 +49,22 @@ export const Projects = [
         status: "In Progress",
         description: "A zero-code, all-in-one visual novel IDE.",
         link: "https://github.com/NarraLeaf/NarraLeaf-Studio"
-    },{
+    },
+    {
+        title: "Wayfo",
+        subtitle: "NodeJS",
+        status: "Finished",
+        description: "By seamlessly connecting to two major e-commerce platforms, Amazon and Wayfair, through automated tools, users can efficiently migrate and optimize home furnishing product data, achieving end-to-end automation from data collection to product listing.",
+        link: "https://github.com/helloyork/wayfo"
+    },
+    {
+        title: "AnimeBoot",
+        subtitle: "C",
+        status: "Finished",
+        description: "A proof-of-concept project that plays animations (looking like animated GIFs) before Windows Boot Manager or custom UEFI bootloaders, making your PC startup process more personalized.",
+        link: "https://github.com/helloyork/AnimeBoot"
+    },
+    {
         title: "@NarraLeaf/CharPack",
         subtitle: "NodeJS",
         status: "Finished",
@@ -58,7 +73,7 @@ export const Projects = [
     },{
         title: "@NarraLeaf/Sound",
         subtitle: "JavaScript",
-        status: "In Progress",
+        status: "Finished",
         description: "A lightweight and modern HTML audio management solution, suitable for simple web games.",
         link: "https://github.com/NarraLeaf/Sound"
     },
@@ -93,14 +108,14 @@ export const Projects = [
     {
         title: "excel2ts",
         subtitle: "NodeJS",
-        status: "In Progress",
+        status: "Finished",
         description: "Convert Excel files to TypeScript Static Types and Datas",
         link: "https://github.com/helloyork/excel2ts"
     },
     {
         title: "react.narraleaf.com",
         subtitle: "Nextra",
-        status: "In Progress",
+        status: "Finished",
         description: "Documentation for NarraLeaf-React",
         link: "https://github.com/NarraLeaf/react.narraleaf.com"
     },
