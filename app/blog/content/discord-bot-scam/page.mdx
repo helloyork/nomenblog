@@ -12,7 +12,7 @@ description: "This is How a Discord Bot Hacked My Friend's Account"
 
 就在我和我的几个朋友们组团玩游戏的时候，我突然连续收到了几条来自我的一个朋友的消息，他的这条消息出现在了我们的私信和共同加入的Discord服务器之中。
 
-![Discord Direct Message](/public/static/blog/2026-03-02%20090037.png)
+![Discord Direct Message](/static/blog/2026-03-02%20090037.png)
 
 第一秒，我并没有察觉到什么，毕竟这只是一个服务器邀请。我只是习惯性地点开了邀请内容，但当我即将点击加入服务器的时候，我意识到问题并不简单。
 
@@ -32,7 +32,7 @@ description: "This is How a Discord Bot Hacked My Friend's Account"
 
 然而下一秒，我注意到进入服务器的第一个页面是一个机器人验证频道，要求我进行机器人验证才能继续。
 
-![Fake Discord Captcha Bot message](/public/static/blog/2026-03-02%20085742.png)
+![Fake Discord Captcha Bot message](/static/blog/2026-03-02%20085742.png)
 
 > 注：这个图片是我在编写此博客时的截图，在我调查的时候，验证机器人的外观发生过改变，这证明攻击者正在不断更换攻击链上的内容
 
@@ -42,7 +42,7 @@ description: "This is How a Discord Bot Hacked My Friend's Account"
 
 我点击了验证按钮，这个按钮以一个短链作为跳板，将我送到了"Captcha Bot"的验证页面。
 
-![Fake Captcha Bot verification website](/public/static/blog/2026-03-02%20090654.png)
+![Fake Captcha Bot verification website](/static/blog/2026-03-02%20090654.png)
 
 这个网页的所有链接都有效，都会前往对应的"captcha.bot"的页面，例如文档、博客和联系方式等信息都高度可信。这误导了我很久，使得我去调查了Reddit等论坛上有关
 Captcha Bot被攻击或者黑入的信息。在这之后，我又去调查了Captcha Bot的背景，尝试找出它与攻击者合作盗窃token的原因。
@@ -59,7 +59,7 @@ Captcha Bot被攻击或者黑入的信息。在这之后，我又去调查了Cap
 
 接着，我点击了验证按钮，弹出了一个Discord登录界面。我输入了准备好的账号和密码，完成了登录。
 
-![Fake Discord Login Page](/public/static/blog/IMG_3084.JPG)
+![Fake Discord Login Page](/static/blog/IMG_3084.JPG)
 
 我返回Discord，检查了安全信息。我注意到的第一件事就是我的登录设备列表里出现了两个距离我不远，但明显不是我的设备的设备。
 
@@ -76,7 +76,7 @@ Captcha Bot被攻击或者黑入的信息。在这之后，我又去调查了Cap
 
 并且，我发现这个登录窗口上有一个愚蠢的Emoji。
 
-![Fake Discord Login Page](/public/static/blog/IMG_3085(1).JPG)
+![Fake Discord Login Page](/static/blog/IMG_3085(1).JPG)
 
 再次查看这个登录界面，即使是我也会被这个标题栏误导。而且实际上我确实去调查了这个Discord应用ID，却没有意识到这个窗口的真实地址是“about:blank”。  
 这种页面是受到父级窗口的完全控制的傀儡，这在我打开开发者工具之后得到了证实。
