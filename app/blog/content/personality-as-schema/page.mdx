@@ -84,7 +84,7 @@ export const assistantMessageSchema = z.object({
 分句播放的单位。
 
 `display_zh`和`voice_ja`是这里面最重要的一个决定。中文给眼睛，日文给耳朵，两者不是翻译关系
-而是两种表达。降级回复是个直观的例子：那里的`display_zh`是“已收到：”后面原样接上用户说的话，
+而是两种表达。降级回复最能说明这一点。那里的`display_zh`是“已收到：”后面原样接上用户说的话，
 而`voice_ja`是固定的一句“先生、確認しました。”，一个负责准确，一个负责像她会说的话。
 
 `emotion`是21个值的枚举，`emotion_intensity`是0到1的连续值。这里没有让模型直接输出表情ID，
@@ -99,7 +99,7 @@ export const assistantMessageSchema = z.object({
 
 `proactive_level`让主动性成为一个可调的档位，而不是提示词里的一个形容词。
 
-还有一个小东西：`emotionSchema`外面套了一层preprocess，把旧标签`mischievous`映射到
+`emotionSchema`外面还套了一层preprocess，把旧标签`mischievous`映射到
 `sullen_smile`。这是给一个我自己造的词表做向后兼容，旧语料和旧存档不用改。
 
 ### 发给模型的schema和用来校验的schema不是同一份
