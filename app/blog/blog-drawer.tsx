@@ -1,12 +1,12 @@
 
 "use server";
 
-import { getBlogList } from "@/app/_lib/data/blogs";
+import { getAllBlogs } from "@/app/_lib/data/blogs";
 
 import BlogListDrawer from "./blog-list-drawer";
 
 export default async function BlogDrawer() {
-    const blogs = await getBlogList(0, 5);
+    const blogs = await getAllBlogs();
 
     if (blogs.status === "error" || !blogs.data) return <div>{blogs.error}</div>;
     return <BlogListDrawer data={blogs.data} />;

@@ -1,5 +1,5 @@
 ---
-title: "Building Plana: Four Months Inside One Desktop Character"
+title: "把普拉娜装进我的电脑：一个人的四个月"
 date: "2026-08-04"
 description: "Four months of rebuilding a game character locally, from the model up"
 ---
@@ -10,9 +10,12 @@ description: "Four months of rebuilding a game character locally, from the model
 （ブルーアーカイブ）。有趣的是，这个角色的设定其实是一个平板系统OS AI。我很久以前就在想，
 如果这样的AI真的做出来了该有多好。冷静中带点温和、偶尔会害羞的AI桌宠将会是一个很酷的东西。
 
-![我输入的那一句](/static/blog/plana-desktop-input.jpg)
+import ImagePair from "@lib/components/image-pair";
 
-![大约两秒之后](/static/blog/plana-desktop-reply.jpg)
+<ImagePair
+    left={{ src: "/static/blog/plana-desktop-input.jpg", alt: "我输入的那一句", caption: "我输入的那一句" }}
+    right={{ src: "/static/blog/plana-desktop-reply.jpg", alt: "大约两秒之后", caption: "大约两秒之后" }}
+/>
 
 我一开始的想法是，调用云端大模型，用提示词工程来让模型输出模仿普拉娜的语风。这如此省事以至于
 我只需要几个小时就能做完。但我最终没有那样干，相反，我花了大量时间编写和整理语料、使用云硬件
@@ -95,9 +98,10 @@ mode。现在这一版是Node和TypeScript的主进程，加一个Godot渲染sid
 
 最近它多了一个运行的位置。
 
-![iPad上的启动画面](/static/blog/plana-ipad-splash.jpg)
-
-![iPad上的主界面](/static/blog/plana-ipad-home.jpg)
+<ImagePair
+    left={{ src: "/static/blog/plana-ipad-splash.jpg", alt: "iPad上的启动画面", caption: "启动画面" }}
+    right={{ src: "/static/blog/plana-ipad-home.jpg", alt: "iPad上的主界面", caption: "主界面" }}
+/>
 
 iPad上跑的是真实的场景和人物模型渲染，本地渲，不是把画面从电脑推过去。但文本、语音和回传的
 交互仍然全部在这台电脑上，所以在iPad上跟她说话，回话的是那个真正的9B，不是一个为移动端缩水

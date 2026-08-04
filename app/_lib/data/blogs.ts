@@ -119,6 +119,25 @@ async function scanMdxFiles(): Promise<Blog[]> {
     }
 }
 
+// The blog index has no pagination UI, so it asks for every post rather than a
+// page of them. Kept separate from getBlogList so the paginated path keeps its
+// limit guard.
+export async function getAllBlogs(): Promise<AppRes<Blog[], AppResStatus>> {
+    try {
+        return {
+            status: "success",
+            data: await scanMdxFiles(),
+            error: null
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            data: null,
+            error: "Failed to scan blog files: " + (error as Error).message
+        };
+    }
+}
+
 export async function getBlogList(offset: number = 0, limit: number = 10): Promise<AppRes<Blog[], AppResStatus>> {
     if (offset < 0 || limit < 0 || limit > 20) return {
         status: "error",
