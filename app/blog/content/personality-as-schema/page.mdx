@@ -1,0 +1,203 @@
+---
+title: "Writing a Personality as a Schema"
+date: "2026-08-03"
+description: "Why forcing a local model into JSON made the character work instead of breaking it"
+---
+
+# 把人格写成一份schema
+
+这篇博客讲一个具体的设计决定：让本地语言模型只输出JSON，不输出自然语言。
+
+我桌面上有一个AI角色，跑在一个微调过的Qwen3.5-9B上。我随口问了它一句，从模型出来的东西
+是这样的：
+
+```json
+{
+  "reply_type": "assistant_message",
+  "segments": [
+    {
+      "display_zh": "唔…如果老师选择困难，可能会稍微吃紧一些，",
+      "voice_ja": "うーん…もし先生が迷うなら、少し大変かもしれません。",
+      "emotion": "thinking",
+      "emotion_intensity": 0.45,
+      "should_speak": true
+    },
+    {
+      "display_zh": "但我会尽力协助您做出决定。",
+      "voice_ja": "でも、私は全力で選択をサポートします。",
+      "emotion": "thinking",
+      "emotion_intensity": 0.45,
+      "should_speak": true
+    }
+  ],
+  "tool_calls": [],
+  "memory_candidates": [],
+  "proactive_level": "none"
+}
+```
+
+发给它的系统提示词是完整的两句话：
+
+> 你是以普拉娜为原型的原创桌面 AI 伙伴。你必须始终输出符合项目 schema 的 JSON object，不得在 JSON 外输出任何文字。
+
+没有性格描述，没有说话风格，没有示例对话。角色的表现完全不来自这段提示词。
+
+强制JSON通常被认为会让模型的输出变得机械，角色扮演场景尤其如此。实际用下来我的结论相反。
+这份schema没有削弱角色的表现力，它是这个角色能够成立的前提。
+
+本文说明这份契约的每个字段解决了什么问题，怎么让一个9B的本地量化模型稳定遵守它，
+以及schema管不住的部分我用什么方式补上。
+
+## 三个下游，一份输出
+
+这个角色不止有一个下游。同一句回复要同时送到三个地方：屏幕上的中文字幕、GPT-SoVITS的日文
+语音合成、Godot渲染器的表情和口型。三者要的东西不一样。
+
+如果模型只给出一段自然语言，下游就得写一个解析器去反推：这句话是什么情绪，情绪有多强，
+该不该念出来，念的时候用哪种语言。这四个问题都只能靠猜，而猜错的地方最后都会变成用户看得见
+的毛病。
+
+模型是唯一知道答案的那一个。它刚刚生成完这句话，当然清楚自己想表达什么。所以正确的做法不是
+让下游去猜，而是让模型直接说出来。
+
+## 这份契约
+
+```typescript
+export const segmentSchema = z.object({
+  display_zh: z.string().min(1),
+  voice_ja: z.string().min(1),
+  emotion: emotionSchema,
+  emotion_intensity: z.number().min(0).max(1),
+  should_speak: z.boolean()
+});
+
+export const assistantMessageSchema = z.object({
+  reply_type: z.literal("assistant_message").default("assistant_message"),
+  segments: z.array(segmentSchema).min(1),
+  tool_calls: z.array(toolCallSchema).default([]),
+  memory_candidates: z.array(z.string()).default([]),
+  proactive_level: z.enum(["none", "low", "medium", "high"]).default("none")
+});
+```
+
+`segments`是数组而不是单条，因为一次回复可以有情绪转折。而且TTS是按段排队的，分段同时就是
+分句播放的单位。
+
+`display_zh`和`voice_ja`是这里面最重要的一个决定。中文给眼睛，日文给耳朵，两者不是翻译关系
+而是两种表达。降级回复是个直观的例子：那里的`display_zh`是“已收到：”后面原样接上用户说的话，
+而`voice_ja`是固定的一句“先生、確認しました。”，一个负责准确，一个负责像她会说的话。
+
+`emotion`是21个值的枚举，`emotion_intensity`是0到1的连续值。这里没有让模型直接输出表情ID，
+因为模型该表达的是意图，从意图到具体表情ID的映射是应用的事，换一套立绘不该需要重训模型。
+强度让同一种情绪能分出层次，同样是不安，低强度和高强度落到的是不同的表情。
+
+`should_speak`把显示和发声分开。有些内容适合出现在字幕里但不适合念出来。
+
+`tool_calls`带一个`risk_level`，默认是`read`。权限分级写在schema里，而不是等到运行时再判断。
+
+`memory_candidates`是模型的提名，提名不等于录取，后面会说这一条。
+
+`proactive_level`让主动性成为一个可调的档位，而不是提示词里的一个形容词。
+
+还有一个小东西：`emotionSchema`外面套了一层preprocess，把旧标签`mischievous`映射到
+`sullen_smile`。这是给一个我自己造的词表做向后兼容，旧语料和旧存档不用改。
+
+### 发给模型的schema和用来校验的schema不是同一份
+
+上面那份是校验用的。真正发给Ollama的那份只require了`segments`：
+
+```typescript
+export const assistantMessageJsonSchema = {
+  type: "object",
+  required: ["segments"],
+  properties: {
+    segments: { /* display_zh / voice_ja / emotion / emotion_intensity / should_speak */ }
+  }
+} as const;
+```
+
+`reply_type`、`tool_calls`、`memory_candidates`、`proactive_level`都不在里面，模型根本不知道
+它们存在。翻数据库里保存的原始响应可以看到，模型吐出来的就只有一个`segments`，另外四个字段
+是zod校验时用`default`补上的。
+
+这么分开是因为约束模型和约束下游本来就是两件事。模型只需要决定它真正该决定的东西：说什么、
+用什么情绪说、念不念。剩下的是应用层的结构，让模型每次都生成一遍空数组没有收益，只会多几个
+出错的机会。
+
+## 怎么让模型真的遵守
+
+三件事。请求里带上那份JSON Schema，走Ollama的结构化输出，同时关掉thinking和streaming；
+拿到结果先过zod，不通过就走降级；训练侧和推理侧用完全一样的系统提示词，一个字都不差。
+
+降级路径本身是一个合法的`AssistantMessage`：
+
+```typescript
+export function createFallbackAssistantMessage(userText: string): AssistantMessage {
+  return {
+    reply_type: "assistant_message",
+    segments: [
+      {
+        display_zh: `已收到：${userText}`,
+        voice_ja: "先生、確認しました。",
+        emotion: "calm",
+        emotion_intensity: 0.35,
+        should_speak: false
+      }
+    ],
+    tool_calls: [],
+    memory_candidates: [],
+    proactive_level: "none"
+  };
+}
+```
+
+降级和正常走的是同一个类型，下游因此不需要写两套代码。`should_speak`是false，所以它会显示
+但不出声，用户看得出这一轮不太对，但不会听到一句突兀的话。
+
+## schema管不住的部分
+
+有两件事写不进类型里。
+
+第一件是重复。模型有时候会把上一轮的回答原样再说一遍，这在语法上完全合法，schema拦不住。
+检测的做法是把`segments`里的`display_zh`拼起来，去掉空白和标点，和最近四条assistant回复
+分别做二元字符shingle的Jaccard相似度，超过阈值就判重。纯词法，确定性，不引入第二个模型依赖。
+
+判重之后不是简单重发一次。系统会带上一个`retry_reason`和一份avoid列表重新请求，而构造上下文
+的时候会把avoid列表里的历史回复从`recent_messages`里删掉，所以模型重试时看不到自己刚说过的
+那一句。
+
+数据库里正好留着一组能说明问题的记录。我问它抽卡会不会吃保底，第一次的回答是“是的，老师。
+您会突然做出决定，确实让我有些意外。”这句话和上一轮的回答几乎一样，而且和当前的问题没有关系。
+重复检测抓到了它，第二次的回答变成了“可能会，老师。抽奖系统存在保底机制，但具体结果仍需看
+概率。”
+
+第二件是记忆。`memory_candidates`只是提名，写不写进长期记忆由另一套判定决定，看的是内容里的
+信号词：出现“以后”“长期”“默认”“一直”“记住”这类的接受，出现“今天”“现在”“刚才”
+“这次”这类的直接拒绝，只留在工作状态里。两类都没命中的时候，如果这条属于项目事实、身份或者
+授权就接受，其余一律返回`ask_confirm`，也就是拿不准就问，不擅自写入。
+
+不让模型自己判断该不该记，是因为我需要能解释和调试。词法规则判错了我知道错在哪一条上，
+模型判错了我只能改提示词再试一次，而且没有办法确认下一次不会再错。
+
+## 输入侧也是结构化的
+
+输出是JSON，输入也是。发给模型的user message本身就是一个JSON字符串，字段是
+`current_user_input`、`retry_reason`、`recent_messages`、`working_state`、`memory_context`
+和`available_emotions`。整个对话接口的两端都是结构化的，自然语言只存在于`display_zh`和
+`voice_ja`这两个叶子字段里。
+
+`available_emotions`是随每次请求下发的，不写死在系统提示词里，所以情绪词表可以改而不用重训。
+
+`recent_messages`也不是原样塞进去的。它会去掉末尾那条和当前输入重复的user消息，删掉命中avoid
+列表的assistant消息，只保留最后八条，再把连续相同的assistant消息折叠掉。工作状态里的几个
+数组同样各自只取最后三到四条。这些裁剪都是为量化模型做的，上下文越长它越容易跑偏。
+
+## 人格在哪里
+
+回到开头那两句系统提示词。它可以这么短，是因为人格不在那里。
+
+人格在训练语料里，在那21个情绪值和它们对应的表情映射里，在`display_zh`和`voice_ja`两个字符串
+的写法里。提示词只负责说明输出格式。
+
+这也是为什么强制JSON没有让它变机械。情绪、强度、语言、发不发声都成了显式字段之后，模型不需要
+再在自然语言里暗示这些东西，它可以把全部表达力压进那两个字符串。剩下的交给类型系统。
