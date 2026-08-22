@@ -51,6 +51,13 @@ export const Projects = [
         link: "https://github.com/NarraLeaf/NarraLeaf-Studio"
     },
     {
+        title: "driftfield",
+        subtitle: "TypeScript",
+        status: "In Progress",
+        description: "Deterministic, seamlessly looping procedural particle fields (snow, rain, falling petals), rasterised to RGBA with zero dependencies.",
+        link: "https://github.com/helloyork/driftfield"
+    },
+    {
         title: "Wayfo",
         subtitle: "NodeJS",
         status: "Finished",
