@@ -34,14 +34,22 @@ const MDXComponents = {
         <a className="text-blue-400 hover:text-blue-300 hover:underline" {...props} />,
     code: (props: Props) => 
         <code className="bg-gray-800 text-gray-100 rounded px-2 py-1 text-sm font-mono" {...props} />,
-    table: (props: Props) => 
-        <table className="min-w-full bg-white dark:bg-gray-800 my-4" {...props} />,
-    tr: (props: Props) => 
-        <tr className="border-b border-gray-200 dark:border-gray-700" {...props} />,
-    th: (props: Props) => 
-        <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400" {...props} />,
-    td: (props: Props) => 
-        <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300" {...props} />,
+    // Tailwind's darkMode is "class" and nothing sets that class, so the old
+    // `dark:` variants never applied and tables rendered as a white slab on the
+    // dark page. These colours are unconditional, and comparison tables wider
+    // than the column scroll inside their own frame instead of being squeezed.
+    table: (props: Props) =>
+        <div className="my-6 overflow-x-auto rounded-lg border border-gray-700">
+            <table className="min-w-full border-collapse text-left" {...props} />
+        </div>,
+    thead: (props: Props) =>
+        <thead className="bg-gray-800/70" {...props} />,
+    tr: (props: Props) =>
+        <tr className="border-b border-gray-800 last:border-b-0" {...props} />,
+    th: (props: Props) =>
+        <th className="whitespace-nowrap px-4 py-2.5 text-left text-sm font-semibold text-gray-200" {...props} />,
+    td: (props: Props) =>
+        <td className="px-4 py-2.5 align-top text-sm text-gray-300" {...props} />,
     ul: (props: Props) => 
         <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
     ol: (props: Props) => 
