@@ -51,6 +51,13 @@ export const Projects = [
         link: "https://github.com/NarraLeaf/NarraLeaf-Studio"
     },
     {
+        title: "Shittim Logon",
+        subtitle: "C++ / Win32",
+        status: "In Progress",
+        description: "Replaces the Windows 11 logon screen with a live Spine-rendered Shittim Chest scene: a zero-tile credential provider as the wake signal, a DirectComposition overlay on the secure desktop, and a Hyper-V lab to measure what it costs.",
+        link: "https://github.com/helloyork/shittim-logon"
+    },
+    {
         title: "driftfield",
         subtitle: "TypeScript",
         status: "In Progress",
