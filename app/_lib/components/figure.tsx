@@ -1,5 +1,7 @@
 "use client";
 
+import GlyphFigure from "./glyph-figure";
+
 /**
  * A single wide image with a caption. The comparison strips only mean anything
  * at 1:1, and they are far wider than the column, so the image links to itself
@@ -15,20 +17,11 @@ export default function Figure({
     caption?: string;
 }) {
     return (
-        <figure className="my-6 m-0">
+        <figure className="n-fig">
             <a href={src} target="_blank" rel="noreferrer">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src={src}
-                    alt={alt}
-                    className="w-full rounded-lg border border-gray-700"
-                />
+                <GlyphFigure src={src} alt={alt} />
             </a>
-            {caption && (
-                <figcaption className="mt-2 text-center text-sm text-gray-400">
-                    {caption}
-                </figcaption>
-            )}
+            {caption && <figcaption>{caption}</figcaption>}
         </figure>
     );
 }

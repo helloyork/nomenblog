@@ -1,116 +1,80 @@
-import React, { JSX } from "react";
-import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import { Prism } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import dynamic from 'next/dynamic';
+import React, { ComponentPropsWithoutRef } from "react";
+import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
+import { Prism } from "react-syntax-highlighter";
+import PostTitle from "./post-title";
+import GlyphFigure from "./glyph-figure";
+import MermaidBlock from "./mermaid-block";
 
 // Cast through unknown to satisfy JSX typing from react-syntax-highlighter.
 const SyntaxHighlighter = Prism as unknown as React.ComponentType<SyntaxHighlighterProps>;
 
-// Dynamically import MermaidChart with no SSR to avoid window undefined errors
-const MermaidChart = dynamic(() => import('./mermaid-chart'), {
-    ssr: false,
-    loading: () => <div className="my-6 text-gray-400">Loading diagram...</div>,
-});
+const FG = "#d6ecff";
+const DIM = "#8398ad";
 
-type Props = JSX.IntrinsicAttributes;
+// Two tones only: structure comes from weight and the dim colour, not hue.
+const oneBit: { [key: string]: React.CSSProperties } = {
+    'code[class*="language-"]': { color: FG, background: "none", fontFamily: "inherit", fontSize: "inherit", lineHeight: "inherit", whiteSpace: "pre", textShadow: "none" },
+    'pre[class*="language-"]': { color: FG, background: "none", margin: 0, padding: "12px 16px 12px 0", overflow: "auto" },
+    comment: { color: DIM, fontStyle: "italic" },
+    prolog: { color: DIM },
+    doctype: { color: DIM },
+    cdata: { color: DIM },
+    punctuation: { color: DIM },
+    operator: { color: DIM },
+    "attr-name": { color: DIM },
+    keyword: { fontWeight: 700 },
+    builtin: { fontWeight: 700 },
+    "class-name": { fontWeight: 700 },
+    boolean: { fontWeight: 700 },
+    tag: { fontWeight: 700 },
+    selector: { fontWeight: 700 },
+    important: { fontWeight: 700 },
+    function: { textDecoration: "underline", textDecorationColor: "#3c4a58", textUnderlineOffset: "3px" },
+};
+
+function textOf(node: React.ReactNode): string {
+    if (typeof node === "string") return node;
+    if (Array.isArray(node)) return node.map(textOf).join("");
+    if (React.isValidElement<{ children?: React.ReactNode }>(node)) return textOf(node.props.children);
+    return "";
+}
+
+function CodeBlock(props: ComponentPropsWithoutRef<"pre">) {
+    const child = props.children as React.ReactElement<{ children?: React.ReactNode; className?: string }> | undefined;
+    const code = textOf(child?.props?.children).replace(/\n$/, "");
+    // remark-prism marks fences without a language as "unknown"
+    const raw = (child?.props?.className ?? "").replace("language-", "");
+    const lang = !raw || raw === "unknown" ? "text" : raw;
+
+    // Mermaid first, before Prism gets a chance to tokenise it
+    if (lang === "mermaid" && code) return <MermaidBlock chart={code.trim()} />;
+
+    const lines = code.split("\n").length;
+    return (
+        <div className="n-code">
+            <div className="n-code-bar"><span>{lang.toUpperCase()} · {lines} {lines === 1 ? "LINE" : "LINES"}</span></div>
+            <SyntaxHighlighter
+                language={lang}
+                style={oneBit}
+                showLineNumbers
+                lineNumberStyle={{ color: DIM, minWidth: "3.5ch", paddingRight: "14px", textAlign: "right", userSelect: "none" }}
+                customStyle={{ background: "none", margin: 0 }}
+            >
+                {code}
+            </SyntaxHighlighter>
+        </div>
+    );
+}
 
 const MDXComponents = {
-    h1: (props: Props) =>
-        <h1 className="text-5xl font-extrabold mt-12 mb-8 border-b border-gray-500 pb-3 text-white" {...props} />,
-    h2: (props: Props) =>
-        <h2 className="text-4xl font-bold mt-12 mb-6 text-gray-100" {...props} />,
-    h3: (props: Props) =>
-        <h3 className="text-3xl font-semibold mt-10 mb-4 text-gray-200" {...props} />,
-    h4: (props: Props) =>
-        <h4 className="text-2xl font-medium mt-8 mb-3 text-gray-200" {...props} />,
-    h5: (props: Props) =>
-        <h5 className="text-xl font-normal mt-6 mb-3 text-gray-300" {...props} />,
-    h6: (props: Props) =>
-        <h6 className="text-lg font-light mt-6 mb-2 text-gray-300" {...props} />,
-    p: (props: Props) => 
-        <p className="mb-4 text-lg leading-relaxed text-gray-300" {...props} />,
-    a: (props: Props) => 
-        <a className="text-blue-400 hover:text-blue-300 hover:underline" {...props} />,
-    code: (props: Props) => 
-        <code className="bg-gray-800 text-gray-100 rounded px-2 py-1 text-sm font-mono" {...props} />,
-    // Tailwind's darkMode is "class" and nothing sets that class, so the old
-    // `dark:` variants never applied and tables rendered as a white slab on the
-    // dark page. These colours are unconditional, and comparison tables wider
-    // than the column scroll inside their own frame instead of being squeezed.
-    table: (props: Props) =>
-        <div className="my-6 overflow-x-auto rounded-lg border border-gray-700">
-            <table className="min-w-full border-collapse text-left" {...props} />
-        </div>,
-    thead: (props: Props) =>
-        <thead className="bg-gray-800/70" {...props} />,
-    tr: (props: Props) =>
-        <tr className="border-b border-gray-800 last:border-b-0" {...props} />,
-    th: (props: Props) =>
-        <th className="whitespace-nowrap px-4 py-2.5 text-left text-sm font-semibold text-gray-200" {...props} />,
-    td: (props: Props) =>
-        <td className="px-4 py-2.5 align-top text-sm text-gray-300" {...props} />,
-    ul: (props: Props) => 
-        <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
-    ol: (props: Props) => 
-        <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
-    li: (props: Props) => 
-        <li className="leading-relaxed" {...props} />,
-    blockquote: (props: Props) => 
-        <blockquote className="border-l-4 border-gray-400 pl-4 my-4 italic text-gray-400 bg-gray-900/50 py-2 rounded-r" {...props} />,
-    pre: (props: any) => {
-        // Extract language from className if present
-        const extractText = (node: any): string => {
-            if (typeof node === 'string') return node;
-            if (Array.isArray(node)) return node.map(extractText).join('');
-            if (React.isValidElement(node)) {
-                // props may be unknown
-                const childrenAny = (node as any).props?.children;
-                return extractText(childrenAny);
-            }
-            return '';
-        };
-
-        const codeElementRaw = props.children?.props?.children;
-        const codeText = extractText(codeElementRaw);
-        const className = props.children?.props?.className || '';
-        const language = className.replace('language-', '') || 'text';
-        
-        // Mermaid handling first to avoid Prism rendering interference
-        if (language === 'mermaid') {
-            if (codeText) {
-                return (
-                    <div className="my-6">
-                        <MermaidChart chart={codeText.trim()} />
-                    </div>
-                );
-            }
-        }
-
-        if (typeof codeText === 'string') {
-            return (
-                <div className="my-6">
-                    <SyntaxHighlighter
-                        language={language}
-                        style={oneDark}
-                        customStyle={{
-                            borderRadius: '0.5rem',
-                            border: '1px solid #374151',
-                            fontSize: '0.875rem',
-                        }}
-                        {...props}
-                    >
-                        {codeText}
-                    </SyntaxHighlighter>
-                </div>
-            );
-        }
-        return (
-            <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6 border border-gray-700" {...props} />
-        );
-    },
-    inlineCode: (props: Props) => 
-        <code className="bg-gray-800 text-gray-100 rounded px-1 py-0.5 text-sm font-mono" {...props} />,
+    h1: ({ children }: ComponentPropsWithoutRef<"h1">) => <PostTitle>{children}</PostTitle>,
+    pre: CodeBlock,
+    table: (props: ComponentPropsWithoutRef<"table">) => (
+        <div className="n-tbl">
+            <table {...props} />
+        </div>
+    ),
+    img: ({ src, alt }: ComponentPropsWithoutRef<"img">) => <GlyphFigure src={typeof src === "string" ? src : ""} alt={alt ?? ""} className="n-inline-img" />,
 };
 
 export default MDXComponents;

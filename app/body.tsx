@@ -1,28 +1,23 @@
 "use client";
 
 import React from "react";
-
-import clsx from "clsx";
-import { useTheme } from "@lib/data/theme";
-import Nav from "@lib/elements/navbar";
+import MenuBar from "@lib/components/menu-bar";
+import DissolveOverlay from "@lib/components/dissolve";
 import FadeTransition from "./_lib/components/fade-transition";
 
 
 export default function Body({ children }: {
     children: React.ReactNode;
 }) {
-    const { theme } = useTheme();
     return (
-        <>
-            <div className={clsx(theme)}>
-                <Nav />
-            </div>
-            <main className={clsx("text-foreground bg-black", "h-full min-h-screen")}>
+        <div className="n-site">
+            <MenuBar />
+            <main className="n-main">
                 <FadeTransition>
                     {children}
                 </FadeTransition>
             </main>
-        </>
+            <DissolveOverlay />
+        </div>
     );
 }
-

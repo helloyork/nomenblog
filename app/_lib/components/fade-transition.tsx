@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useContext, useEffect, useRef } from 'react';
+import { dissolve } from './dissolve';
 
 function FrozenRouter(props: { children: React.ReactNode }) {
   const context = useContext(LayoutRouterContext ?? {});
@@ -20,11 +21,11 @@ function FrozenRouter(props: { children: React.ReactNode }) {
   );
 }
 
+// No fade: the outgoing page only waits while the Bayer dissolve covers it.
 const defaultVariants = {
-  // Fade only, no scaling to avoid visual displacement on initial load
-  hidden: { opacity: 0 },
-  enter: { opacity: 1 },
-  exit: { opacity: 0 },
+  hidden: { opacity: 1 },
+  enter: { opacity: 1, transition: { duration: 0 } },
+  exit: { opacity: 0.999, transition: { duration: 0.24 } },
 };
 
 function scrollToTop() {
@@ -59,6 +60,14 @@ function ScrollReset({ skipOnce }: { skipOnce: React.MutableRefObject<boolean> }
   return null;
 }
 
+/** The incoming page uncovers itself once it has mounted. */
+function Reveal() {
+  useEffect(() => {
+    dissolve.reveal();
+  }, []);
+  return null;
+}
+
 const FadeTransition = ({ children, variants }: { children: React.ReactNode, variants?: any }) => {
   // The `key` is tied to the url using the `usePathname` hook.
   const key = usePathname();
@@ -80,10 +89,13 @@ const FadeTransition = ({ children, variants }: { children: React.ReactNode, var
         animate="enter"
         exit="exit"
         variants={variants || defaultVariants}
-        transition={{ ease: 'easeInOut', duration: 0.3 }}
+        onAnimationStart={(definition) => {
+          if (definition === 'exit') dissolve.cover();
+        }}
         style={{ position: 'absolute', width: '100%' }}
       >
         <ScrollReset skipOnce={cameFromHistory} />
+        <Reveal />
         <FrozenRouter>{children}</FrozenRouter>
       </motion.div>
     </AnimatePresence>

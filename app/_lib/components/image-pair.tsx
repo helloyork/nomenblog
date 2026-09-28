@@ -1,5 +1,7 @@
 "use client";
 
+import GlyphFigure from "./glyph-figure";
+
 type Shot = {
     src: string;
     alt: string;
@@ -21,21 +23,15 @@ export default function ImagePair({
     maxHeight?: string;
 }) {
     return (
-        <div className="my-6 flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="n-pair">
             {[left, right].map((shot) => (
-                <figure key={shot.src} className="m-0 flex min-w-0 flex-1 flex-col">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                <figure key={shot.src} className="n-fig">
+                    <GlyphFigure
                         src={shot.src}
                         alt={shot.alt}
-                        className="mx-auto rounded-lg border border-gray-700"
-                        style={{ maxHeight, maxWidth: "100%", width: "auto" }}
+                        imgStyle={{ maxHeight, maxWidth: "100%", width: "auto", margin: "0 auto" }}
                     />
-                    {shot.caption && (
-                        <figcaption className="mt-2 text-center text-sm text-gray-400">
-                            {shot.caption}
-                        </figcaption>
-                    )}
+                    {shot.caption && <figcaption>{shot.caption}</figcaption>}
                 </figure>
             ))}
         </div>

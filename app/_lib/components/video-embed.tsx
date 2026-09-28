@@ -16,13 +16,9 @@ export default function BilibiliEmbed({
     if (cid !== undefined) params.set("cid", String(cid));
 
     return (
-        <div className="my-6">
-            <div
-                className="relative w-full overflow-hidden rounded-lg border border-gray-700"
-                style={{ aspectRatio: "16 / 9" }}
-            >
+        <figure className="n-fig">
+            <div className="n-video">
                 <iframe
-                    className="absolute inset-0 h-full w-full"
                     src={`https://player.bilibili.com/player.html?${params.toString()}`}
                     title={title ?? "Bilibili video"}
                     allowFullScreen
@@ -30,7 +26,7 @@ export default function BilibiliEmbed({
                     frameBorder="0"
                 />
             </div>
-            {title && <p className="mt-2 text-sm text-gray-400">{title}</p>}
-        </div>
+            {title && <figcaption>{title}</figcaption>}
+        </figure>
     );
 }

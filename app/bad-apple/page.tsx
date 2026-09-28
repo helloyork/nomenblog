@@ -51,11 +51,11 @@ export default function BadApplePage() {
     const currentFrame = useMemo(() => frames[index] ?? "", [frames, index]);
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-black text-gray-200 px-4 py-10">
-            <pre className="font-mono whitespace-pre text-gray-100 leading-[1.05] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] w-[60vw] max-w-3xl min-h-[320px]">
+        <section className="n-badapple">
+            <pre className="whitespace-pre leading-[1.05] text-[13px] sm:text-[14px] md:text-[15px] lg:text-[16px] w-[60vw] max-w-3xl min-h-[320px]">
                 {state === "error" ? "Failed to load frames." : currentFrame}
             </pre>
-        </main>
+        </section>
     );
 }
 

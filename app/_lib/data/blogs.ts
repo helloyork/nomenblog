@@ -11,6 +11,10 @@ export type Blog = {
     href: string;
     preview?: string;
     frontmatter?: any;
+    /** Rough reading time: 400 Han characters or 220 Latin words a minute. */
+    readMinutes: number;
+    /** Size of the MDX source in bytes. */
+    bytes: number;
 };
 
 // Extract preview text from MDX content (first paragraph)
@@ -25,12 +29,23 @@ function extractPreview(content: string, maxLength: number = 150): string {
         contentStart = endIndex > 0 ? endIndex + 1 : 0;
     }
     
-    // Find first paragraph (skip headers)
+    // Find first paragraph (skip headers, imports, and JSX blocks that span several lines)
+    let inJsx = false;
     for (let i = contentStart; i < lines.length; i++) {
         const line = lines[i].trim();
-        if (line && !line.startsWith('#') && !line.startsWith('---') && !line.startsWith(':::')) {
+        if (inJsx) {
+            if (line.endsWith('>')) inJsx = false;
+            continue;
+        }
+        if (line.startsWith('<') && !line.endsWith('>')) {
+            inJsx = true;
+            continue;
+        }
+        if (line && !line.startsWith('#') && !line.startsWith('---') && !line.startsWith(':::')
+            && !line.startsWith('import ') && !line.startsWith('<') && !line.startsWith('|') && !line.startsWith('```')) {
             // Clean markdown formatting
             const cleaned = line
+                .replace(/^>\s*/, '') // Drop a blockquote marker
                 .replace(/[#*_`]/g, '') // Remove markdown formatting
                 .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Convert links to text
                 .trim();
@@ -94,13 +109,17 @@ async function scanMdxFiles(): Promise<Blog[]> {
                         
                         // Extract preview
                         const preview = extractPreview(content);
+                        const han = (content.match(/[一-鿿]/g) ?? []).length;
+                        const words = (content.match(/[A-Za-z]+/g) ?? []).length;
                         
                         blogs.push({
                             title,
                             date,
                             href: item.name,
                             preview,
-                            frontmatter
+                            frontmatter,
+                            readMinutes: Math.max(1, Math.round(han / 400 + words / 220)),
+                            bytes: Buffer.byteLength(fileContent, 'utf-8'),
                         });
                     } catch (error) {
                         console.error(`Error processing ${mdxPath}:`, error);
