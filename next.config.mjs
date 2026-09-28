@@ -5,6 +5,7 @@ import remarkPrism from 'remark-prism';
 import remarkGfm from 'remark-gfm';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
+import remarkCjkBreaks from './app/_lib/mdx/remark-cjk-breaks.mjs';
 
 export default withMDX({
   extension: /\.mdx?$/,
@@ -13,6 +14,7 @@ export default withMDX({
       remarkFrontmatter,
       remarkMdxFrontmatter,
       remarkGfm,
+      remarkCjkBreaks,
       remarkPrism
     ],
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
