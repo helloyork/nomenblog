@@ -51,6 +51,27 @@ export const Projects = [
         link: "https://github.com/NarraLeaf/NarraLeaf-Studio"
     },
     {
+        title: "AnimeLogon",
+        subtitle: "C++ / Win32",
+        status: "In Progress",
+        description: "Replaces the Windows 10/11 lock screen with an animated wallpaper.",
+        link: "https://github.com/helloyork/AnimeLogon"
+    },
+    {
+        title: "AnimeBoot",
+        subtitle: "C",
+        status: "In Progress",
+        description: "A proof-of-concept project that plays animations (looking like animated GIFs) before Windows Boot Manager or custom UEFI bootloaders, making your PC startup process more personalized.",
+        link: "https://github.com/helloyork/AnimeBoot"
+    },
+    {
+        title: "Micula",
+        subtitle: "C++17",
+        status: "In Progress",
+        description: "Fluent-style controls for Win32 programs. Header-only, drawn with Direct2D into a DirectComposition swap chain so Windows 11 can show Mica behind the window.",
+        link: "https://github.com/helloyork/micula"
+    },
+    {
         title: "Shittim Logon",
         subtitle: "C++ / Win32",
         status: "In Progress",
@@ -72,13 +93,6 @@ export const Projects = [
         link: "https://github.com/helloyork/wayfo"
     },
     {
-        title: "AnimeBoot",
-        subtitle: "C",
-        status: "Finished",
-        description: "A proof-of-concept project that plays animations (looking like animated GIFs) before Windows Boot Manager or custom UEFI bootloaders, making your PC startup process more personalized.",
-        link: "https://github.com/helloyork/AnimeBoot"
-    },
-    {
         title: "@NarraLeaf/CharPack",
         subtitle: "NodeJS",
         status: "Finished",
@@ -97,6 +111,34 @@ export const Projects = [
         status: "In Progress",
         description: "NarraLeaf's own programming language",
         link: "https://github.com/NarraLeaf/NarraLang"
+    },
+    {
+        title: "NarraLeaf-Team",
+        subtitle: "TypeScript",
+        status: "In Progress",
+        description: "A self-hosted project server for teams working in NarraLeaf Studio: shared projects, accounts and access checks, run on the team's own network.",
+        link: "https://github.com/NarraLeaf/NarraLeaf-Team"
+    },
+    {
+        title: "Studio-Shell",
+        subtitle: "Kotlin / Swift",
+        status: "In Progress",
+        description: "The native WebView shells NarraLeaf Studio repacks into Android and iOS builds of a game, so an author never installs a mobile SDK.",
+        link: "https://github.com/NarraLeaf/Studio-Shell"
+    },
+    {
+        title: "NarraLeaf Plugins",
+        subtitle: "TypeScript",
+        status: "In Progress",
+        description: "The official plugin registry for NarraLeaf Studio.",
+        link: "https://github.com/NarraLeaf/Plugins"
+    },
+    {
+        title: "narraleaf.com",
+        subtitle: "Fumadocs",
+        status: "In Progress",
+        description: "NarraLeaf's website: documentation and a blog in Chinese, English and Japanese.",
+        link: "https://github.com/NarraLeaf/narraleaf.com"
     },
     {
         title: "NarraUI",
