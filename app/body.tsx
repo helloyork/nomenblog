@@ -2,7 +2,7 @@
 
 import React from "react";
 import MenuBar from "@lib/components/menu-bar";
-import DissolveOverlay from "@lib/components/dissolve";
+import DiveOverlay from "@lib/components/dive";
 import FadeTransition from "./_lib/components/fade-transition";
 
 
@@ -17,7 +17,7 @@ export default function Body({ children }: {
                     {children}
                 </FadeTransition>
             </main>
-            <DissolveOverlay />
+            <DiveOverlay />
         </div>
     );
 }

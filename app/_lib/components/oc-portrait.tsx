@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { PBG, PFG, atkinson, clamp } from "@lib/glyph/core";
 
-/** The OC's head and shoulders, Atkinson-dithered to one bit, 128x96 shown at 2x. */
+/**
+ * The OC's head and shoulders in the page's two colours. The source map keeps
+ * tone in red, outline strength in green and the figure mask in blue; the
+ * figure is printed where tone outweighs outline, at the map's own resolution.
+ */
 export default function OCPortrait() {
     const ref = useRef<HTMLCanvasElement>(null);
 
@@ -15,22 +18,25 @@ export default function OCPortrait() {
         img.src = "/static/oc/oc-map.png";
         img.decode().then(() => {
             if (!alive) return;
-            const w = 128, h = 96, iw = img.naturalWidth, crop = iw * 0.9;
-            const s = document.createElement("canvas");
-            s.width = w;
-            s.height = h;
-            const sx = s.getContext("2d", { willReadFrequently: true })!;
-            sx.drawImage(img, iw * 0.05, img.naturalHeight * 0.04, crop, crop * 0.75, 0, 0, w, h);
-            const d = sx.getImageData(0, 0, w, h).data, g = new Float32Array(w * h);
-            // tone minus outline strength, inside the figure only
-            for (let i = 0; i < w * h; i++) g[i] = d[i * 4 + 2] > 127 ? clamp((d[i * 4] / 255) * 1.08 - (d[i * 4 + 1] / 255) * 0.9, 0, 1) * 255 : 0;
-            const bits = atkinson(g, w, h);
-            const x = cv.getContext("2d")!, out = x.createImageData(w, h), o = new Uint32Array(out.data.buffer);
-            for (let i = 0; i < w * h; i++) o[i] = bits[i] ? PFG : PBG;
-            x.putImageData(out, 0, 0);
+            const iw = img.naturalWidth, crop = iw * 0.9;
+            const w = Math.round(crop), h = Math.round(crop * 0.75);
+            cv.width = w;
+            cv.height = h;
+            const x = cv.getContext("2d", { willReadFrequently: true })!;
+            x.drawImage(img, iw * 0.05, img.naturalHeight * 0.04, crop, crop * 0.75, 0, 0, w, h);
+            const style = getComputedStyle(cv);
+            const parse = (c: string) => (c.match(/\d+(\.\d+)?/g) ?? ["0", "0", "0"]).slice(0, 3).map(Number);
+            const fg = parse(style.color), bg = parse(style.getPropertyValue("--bg-rgb") || "246,246,243");
+            const data = x.getImageData(0, 0, w, h), d = data.data;
+            for (let i = 0; i < w * h; i++) {
+                const tone = d[i * 4 + 2] > 127 ? (d[i * 4] / 255) * 1.08 - (d[i * 4 + 1] / 255) * 0.9 : 0;
+                const c = tone > 0.42 ? fg : bg;
+                d[i * 4] = c[0]; d[i * 4 + 1] = c[1]; d[i * 4 + 2] = c[2]; d[i * 4 + 3] = tone > 0.42 ? 255 : 0;
+            }
+            x.putImageData(data, 0, 0);
         }).catch(() => { /* the frame stays empty */ });
         return () => { alive = false; };
     }, []);
 
-    return <canvas ref={ref} width={128} height={96} className="n-portrait" aria-hidden="true" />;
+    return <canvas ref={ref} width={339} height={254} className="n-portrait" aria-hidden="true" />;
 }

@@ -2,16 +2,16 @@ import React, { ComponentPropsWithoutRef } from "react";
 import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 import { Prism } from "react-syntax-highlighter";
 import PostTitle from "./post-title";
-import GlyphFigure from "./glyph-figure";
 import MermaidBlock from "./mermaid-block";
 
 // Cast through unknown to satisfy JSX typing from react-syntax-highlighter.
 const SyntaxHighlighter = Prism as unknown as React.ComponentType<SyntaxHighlighterProps>;
 
-const FG = "#d6ecff";
-const DIM = "#8398ad";
+// The code panel is printed the other way round from its page; tokens stay in
+// that one colour, told apart by weight, underline and a faded tone.
+const FG = "inherit";
+const DIM = "color-mix(in srgb, currentColor 55%, transparent)";
 
-// Two tones only: structure comes from weight and the dim colour, not hue.
 const oneBit: { [key: string]: React.CSSProperties } = {
     'code[class*="language-"]': { color: FG, background: "none", fontFamily: "inherit", fontSize: "inherit", lineHeight: "inherit", whiteSpace: "pre", textShadow: "none" },
     'pre[class*="language-"]': { color: FG, background: "none", margin: 0, padding: "12px 16px 12px 0", overflow: "auto" },
@@ -29,7 +29,7 @@ const oneBit: { [key: string]: React.CSSProperties } = {
     tag: { fontWeight: 700 },
     selector: { fontWeight: 700 },
     important: { fontWeight: 700 },
-    function: { textDecoration: "underline", textDecorationColor: "#3c4a58", textUnderlineOffset: "3px" },
+    function: { textDecoration: "underline", textDecorationColor: DIM, textUnderlineOffset: "3px" },
 };
 
 function textOf(node: React.ReactNode): string {
@@ -52,7 +52,7 @@ function CodeBlock(props: ComponentPropsWithoutRef<"pre">) {
     const lines = code.split("\n").length;
     return (
         <div className="n-code">
-            <div className="n-code-bar"><span>{lang.toUpperCase()} · {lines} {lines === 1 ? "LINE" : "LINES"}</span></div>
+            <div className="n-code-bar"><span>{lang} · {lines} {lines === 1 ? "line" : "lines"}</span></div>
             <SyntaxHighlighter
                 language={lang}
                 style={oneBit}
@@ -74,7 +74,8 @@ const MDXComponents = {
             <table {...props} />
         </div>
     ),
-    img: ({ src, alt }: ComponentPropsWithoutRef<"img">) => <GlyphFigure src={typeof src === "string" ? src : ""} alt={alt ?? ""} className="n-inline-img" />,
+    // eslint-disable-next-line @next/next/no-img-element
+    img: ({ src, alt }: ComponentPropsWithoutRef<"img">) => <span className="n-inline-img"><img src={typeof src === "string" ? src : ""} alt={alt ?? ""} loading="lazy" /></span>,
 };
 
 export default MDXComponents;

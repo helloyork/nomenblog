@@ -15,11 +15,11 @@ export type PostInfo = {
 const PostContext = createContext<PostInfo | null>(null);
 export const usePost = () => useContext(PostContext);
 
-/** The document window every post is shown in, plus links to its neighbours. */
+/** The page every post is shown in, plus links to its neighbours. */
 export default function PostShell({ posts, children }: { posts: PostInfo[]; children: React.ReactNode }) {
     const pathname = usePathname();
     // The route transition remounts this per page. Keep the slug it mounted
-    // with, so an outgoing post keeps its own title bar while it is covered.
+    // with, so an outgoing post keeps its own neighbours while it is covered.
     const [slug] = useState(() => pathname.split("/").filter(Boolean).pop() ?? "");
     const i = posts.findIndex((p) => p.slug === slug);
     const post = i >= 0 ? posts[i] : null;
@@ -43,19 +43,13 @@ export default function PostShell({ posts, children }: { posts: PostInfo[]; chil
     return (
         <PostContext.Provider value={post}>
             <section className="n-page n-post-page">
-                <div className="n-win">
-                    <div className="n-win-bar">
-                        <Link className="n-win-x" href="/blog" aria-label="回到博客列表" />
-                        <span className="n-win-ttl">{slug}.mdx</span>
-                    </div>
-                    <article className="n-doc n-md">{children}</article>
-                </div>
-                <nav className="n-pn" aria-label="上一篇和下一篇">
+                <article className="n-md" lang="zh-CN">{children}</article>
+                <nav className="n-pn" aria-label="Older and newer posts">
                     {prev ? (
-                        <Link href={`/blog/content/${prev.slug}`}><span>&lt; PREV</span>{prev.title}</Link>
+                        <Link scroll={false} href={`/blog/content/${prev.slug}`}><span>← Older</span><b className="n-t" lang="zh-CN">{prev.title}</b></Link>
                     ) : <span />}
                     {next && (
-                        <Link className="n-pn-next" href={`/blog/content/${next.slug}`}><span>NEXT &gt;</span>{next.title}</Link>
+                        <Link scroll={false} className="n-pn-next" href={`/blog/content/${next.slug}`}><span>Newer →</span><b className="n-t" lang="zh-CN">{next.title}</b></Link>
                     )}
                 </nav>
             </section>

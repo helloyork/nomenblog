@@ -1,10 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, usePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useContext, useEffect, useRef } from 'react';
-import { dissolve } from './dissolve';
+import { useContext, useEffect, useLayoutEffect, useRef } from 'react';
+import { routeScheme } from '@lib/chuanzi/types';
+import { dive } from './dive';
 
 function FrozenRouter(props: { children: React.ReactNode }) {
   const context = useContext(LayoutRouterContext ?? {});
@@ -21,83 +22,45 @@ function FrozenRouter(props: { children: React.ReactNode }) {
   );
 }
 
-// No fade: the outgoing page only waits while the Bayer dissolve covers it.
-const defaultVariants = {
-  hidden: { opacity: 1 },
-  enter: { opacity: 1, transition: { duration: 0 } },
-  exit: { opacity: 0.999, transition: { duration: 0.24 } },
-};
+/** One route. When it is replaced it stays mounted, under the transition, until the screen is covered. */
+function RoutePage({ path, children }: { path: string; children: React.ReactNode }) {
+  const [isPresent, safeToRemove] = usePresence();
 
-function scrollToTop() {
-  // html and body carry scroll-behavior: smooth, so a plain scrollTo starts an
-  // animation that the incoming route promptly cancels, leaving the old offset.
-  // Ask for an instant jump, and assign scrollTop as well for engines that
-  // ignore the instant behavior.
-  window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
+  useEffect(() => {
+    if (isPresent) return;
+    let live = true;
+    void dive.covered().then(() => { if (live) safeToRemove?.(); });
+    return () => { live = false; };
+  }, [isPresent, safeToRemove]);
+
+  return (
+    <div data-route={path} data-scheme={routeScheme(path)} className="n-route" style={{ position: 'absolute', width: '100%' }}>
+      {children}
+    </div>
+  );
 }
 
 /**
- * FrozenRouter holds on to the old LayoutRouterContext so the outgoing page can
- * finish its exit animation. That is the same context Next uses to find the new
- * segment and scroll it into view, so Next's own scroll reset never lands and a
- * navigation keeps the previous page's offset. This sits inside the keyed
- * wrapper, so it mounts once per route and resets the offset itself.
+ * Both pages are mounted while the route changes: the old one dives or sinks
+ * away on top, the new one waits hidden underneath and comes up once the
+ * screen is covered. FrozenRouter keeps the old page on its own route.
  */
-function ScrollReset({ skipOnce }: { skipOnce: React.MutableRefObject<boolean> }) {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    // Back and forward keep whatever offset the browser restores.
-    if (skipOnce.current) {
-      skipOnce.current = false;
-      return;
-    }
-    scrollToTop();
-  }, [pathname, skipOnce]);
-
-  return null;
-}
-
-/** The incoming page uncovers itself once it has mounted. */
-function Reveal() {
-  useEffect(() => {
-    dissolve.reveal();
-  }, []);
-  return null;
-}
-
-const FadeTransition = ({ children, variants }: { children: React.ReactNode, variants?: any }) => {
-  // The `key` is tied to the url using the `usePathname` hook.
+const FadeTransition = ({ children }: { children: React.ReactNode }) => {
   const key = usePathname();
-  const cameFromHistory = useRef(false);
+  const shown = useRef(key);
 
-  useEffect(() => {
-    const onPopState = () => {
-      cameFromHistory.current = true;
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
+  useLayoutEffect(() => {
+    if (shown.current === key) return;
+    const from = shown.current;
+    shown.current = key;
+    dive.navigate(from, key);
+  }, [key]);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={key}
-        initial="hidden"
-        animate="enter"
-        exit="exit"
-        variants={variants || defaultVariants}
-        onAnimationStart={(definition) => {
-          if (definition === 'exit') dissolve.cover();
-        }}
-        style={{ position: 'absolute', width: '100%' }}
-      >
-        <ScrollReset skipOnce={cameFromHistory} />
-        <Reveal />
+    <AnimatePresence initial={false}>
+      <RoutePage key={key} path={key}>
         <FrozenRouter>{children}</FrozenRouter>
-      </motion.div>
+      </RoutePage>
     </AnimatePresence>
   );
 };

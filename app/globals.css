@@ -4,8 +4,8 @@
 
 /* Page colours live in the site stylesheet (_lib/src/stylesheet/nomen.css). */
 body {
-  color: #d6ecff;
-  background: #07090d;
+  color: #0b0b0b;
+  background: #f6f6f3;
 }
 
 @layer utilities {

@@ -1,25 +1,18 @@
-import Link from "next/link";
-import HomeHero from "@lib/components/home-hero";
-import { GlyphArt } from "@lib/components/glyph-art";
+import { getAllBlogs } from "@lib/data/blogs";
+import { Projects } from "@lib/data/site";
+import { glyphsFor } from "@lib/chuanzi/font.server";
+import HomeStage from "@lib/components/home-stage";
 
-const doors = [
-    { href: "/blog", title: "Blog", kind: 2 },
-    { href: "/projects", title: "Projects", kind: 0 },
-    { href: "/about", title: "About", kind: 3 },
-];
+export default async function Home() {
+    const posts = (await getAllBlogs()).data ?? [];
+    const titles = Object.fromEntries(["NOMEN", "BLOGS", "PROJECTS", "ABOUT", "END"].map((t) => [t, glyphsFor(t)]));
 
-export default function Home() {
     return (
-        <>
-            <HomeHero />
-            <nav className="n-doors" aria-label="Sections">
-                {doors.map((d) => (
-                    <Link className="n-door" href={d.href} key={d.href}>
-                        <GlyphArt kind={d.kind} seed={`door-${d.title.toLowerCase()}`} />
-                        <h2>{d.title}</h2>
-                    </Link>
-                ))}
-            </nav>
-        </>
+        <HomeStage
+            titles={titles}
+            total={posts.length}
+            posts={posts.slice(0, 5).map((p) => ({ title: p.title, href: p.href, date: p.date, preview: p.preview }))}
+            projects={Projects.filter((p) => p.status === "In Progress").slice(0, 5).map((p) => ({ title: p.title, subtitle: p.subtitle, description: p.description, link: p.link }))}
+        />
     );
 }

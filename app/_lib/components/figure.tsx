@@ -1,6 +1,4 @@
-"use client";
-
-import GlyphFigure from "./glyph-figure";
+/* eslint-disable @next/next/no-img-element */
 
 /**
  * A single wide image with a caption. The comparison strips only mean anything
@@ -19,7 +17,7 @@ export default function Figure({
     return (
         <figure className="n-fig">
             <a href={src} target="_blank" rel="noreferrer">
-                <GlyphFigure src={src} alt={alt} />
+                <img src={src} alt={alt} loading="lazy" />
             </a>
             {caption && <figcaption>{caption}</figcaption>}
         </figure>

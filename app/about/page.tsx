@@ -1,5 +1,6 @@
-import GlyphTitle from "@lib/components/glyph-title";
 import OCPortrait from "@lib/components/oc-portrait";
+import Display from "@lib/components/display";
+import CopyButton from "@lib/components/copy-button";
 import { getAllBlogs } from "@/app/_lib/data/blogs";
 
 const sections = [
@@ -47,36 +48,37 @@ You can find more of my work and contributions on my GitHub. Each project repres
 
 export default async function Page() {
     const posts = (await getAllBlogs()).data ?? [];
-    const total = posts.reduce((s, p) => s + p.bytes, 0) || 1;
+    const max = Math.max(1, ...Array.from(new Set(posts.map((p) => p.date.slice(0, 4)))).map((y) => posts.filter((p) => p.date.startsWith(y)).reduce((s, p) => s + p.bytes, 0)));
     const years = Array.from(new Set(posts.map((p) => p.date.slice(0, 4)))).map((year) => {
         const inYear = posts.filter((p) => p.date.startsWith(year));
         const bytes = inYear.reduce((s, p) => s + p.bytes, 0);
-        return { year, share: bytes / total, label: `${(bytes / 1024).toFixed(1)} KB · ${inYear.length} 篇` };
+        return { year, share: bytes / max, label: `${(bytes / 1024).toFixed(1)} KB · ${inYear.length} ${inYear.length === 1 ? "post" : "posts"}` };
     });
 
     return (
         <section className="n-page n-about">
-            <GlyphTitle text="About" />
-            <div className="n-win n-aboutwin">
-                <div className="n-win-bar"><span className="n-win-ttl">About This Nomen</span></div>
-                <div className="n-doc">
-                    <div className="n-ab-top">
-                        <OCPortrait />
-                        <div>
-                            <b className="n-ab-name">Nomen</b><br />
-                            <span className="n-dim">helloyork · full-stack developer</span><br />
-                            <a href="mailto:helloyork@icloud.com">helloyork@icloud.com</a><br />
-                            <a href="https://github.com/helloyork" target="_blank" rel="noreferrer">github.com/helloyork</a>
-                        </div>
+            <Display>ABOUT</Display>
+            <div className="n-about-grid">
+                <div>
+                    <dl className="n-facts">
+                        <dt>Name</dt><dd>Nomen · helloyork</dd>
+                        <dt>Role</dt><dd>Full-stack developer</dd>
+                        <dt>Email</dt><dd><span id="n-mail">helloyork@icloud.com</span><CopyButton text="helloyork@icloud.com" target="n-mail" /></dd>
+                        <dt>GitHub</dt><dd><a href="https://github.com/helloyork" target="_blank" rel="noreferrer">github.com/helloyork</a></dd>
+                        <dt>Site</dt><dd><a href="https://www.nomen.blog/" target="_blank" rel="noreferrer">nomen.blog</a></dd>
+                    </dl>
+                    <div className="n-bytes">
+                        <p className="n-legend">Bytes written per year</p>
+                        {years.map((y) => (
+                            <div className="n-byterow" key={y.year}>
+                                <span>{y.year}</span>
+                                <div className="n-bar"><i style={{ width: `${(y.share * 100).toFixed(1)}%` }} /></div>
+                                <span>{y.label}</span>
+                            </div>
+                        ))}
                     </div>
-                    {years.map((y) => (
-                        <div className="n-memrow" key={y.year}>
-                            <span>{y.year}</span>
-                            <div className="n-mem"><i style={{ width: `${(y.share * 100).toFixed(1)}%` }} /></div>
-                            <span>{y.label}</span>
-                        </div>
-                    ))}
                 </div>
+                <OCPortrait />
             </div>
             <div className="n-about-secs">
                 {sections.map((s) => (

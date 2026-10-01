@@ -1,6 +1,4 @@
-"use client";
-
-import GlyphFigure from "./glyph-figure";
+/* eslint-disable @next/next/no-img-element */
 
 type Shot = {
     src: string;
@@ -26,11 +24,7 @@ export default function ImagePair({
         <div className="n-pair">
             {[left, right].map((shot) => (
                 <figure key={shot.src} className="n-fig">
-                    <GlyphFigure
-                        src={shot.src}
-                        alt={shot.alt}
-                        imgStyle={{ maxHeight, maxWidth: "100%", width: "auto", margin: "0 auto" }}
-                    />
+                    <img src={shot.src} alt={shot.alt} loading="lazy" style={{ maxHeight, maxWidth: "100%", width: "auto", margin: "0 auto" }} />
                     {shot.caption && <figcaption>{shot.caption}</figcaption>}
                 </figure>
             ))}

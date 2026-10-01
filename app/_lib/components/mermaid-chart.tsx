@@ -14,26 +14,26 @@ const MermaidChart: FC<MermaidChartProps> = ({ chart }) => {
     if (!ref.current) return;
 
     // Initialize only once. Subsequent initializations are ignored by mermaid.
-    // The two site colours only: ice lines and text on near-black.
+    // Posts are printed ink on paper; diagrams follow.
     mermaid.initialize({
       startOnLoad: false,
       theme: 'base',
       themeVariables: {
-        darkMode: true,
-        background: '#07090d',
-        primaryColor: '#07090d',
-        primaryTextColor: '#d6ecff',
-        primaryBorderColor: '#d6ecff',
-        secondaryColor: '#07090d',
-        tertiaryColor: '#07090d',
-        lineColor: '#d6ecff',
-        textColor: '#d6ecff',
-        mainBkg: '#07090d',
-        nodeBorder: '#d6ecff',
-        clusterBkg: '#07090d',
-        clusterBorder: '#8398ad',
-        edgeLabelBackground: '#07090d',
-        fontFamily: 'var(--font-mono), monospace',
+        darkMode: false,
+        background: '#f6f6f3',
+        primaryColor: '#f6f6f3',
+        primaryTextColor: '#0b0b0b',
+        primaryBorderColor: '#0b0b0b',
+        secondaryColor: '#f6f6f3',
+        tertiaryColor: '#f6f6f3',
+        lineColor: '#0b0b0b',
+        textColor: '#0b0b0b',
+        mainBkg: '#f6f6f3',
+        nodeBorder: '#0b0b0b',
+        clusterBkg: '#f6f6f3',
+        clusterBorder: '#8a8a87',
+        edgeLabelBackground: '#f6f6f3',
+        fontFamily: 'var(--font-sans), sans-serif',
       },
     });
 

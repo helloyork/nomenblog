@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Pixelify_Sans, Silkscreen } from "next/font/google";
+import { IBM_Plex_Mono, Inter, Noto_Sans_SC } from "next/font/google";
 
 import "./globals.css";
 import "@lib/src/stylesheet/base.css";
@@ -17,12 +17,11 @@ import { EasterExperienceProvider } from "./_lib/data/easter-experience";
 
 // Inter stays on <body> for the easter egg overlay; the site itself uses the faces below.
 const inter = Inter({ subsets: ["latin"] });
-const mono = JetBrains_Mono({ subsets: ["latin", "latin-ext"], weight: ["400", "500", "700"], variable: "--font-mono", display: "swap" });
-const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-pixel", display: "swap" });
-const label = Silkscreen({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-label", display: "swap" });
+const sans = Noto_Sans_SC({ subsets: ["latin"], weight: ["400", "500", "700", "900"], variable: "--font-sans", display: "swap", preload: false });
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = meta;
-export const viewport: Viewport = { themeColor: "#07090d" };
+export const viewport: Viewport = { themeColor: "#0b0b0b" };
 
 export default function RootLayout({
     children,
@@ -31,7 +30,7 @@ export default function RootLayout({
 }>) {
     return (
         // next-themes sets its class on <html> before hydration
-        <html lang="zh-CN" className={clsx("h-full", mono.variable, pixel.variable, label.variable)} suppressHydrationWarning>
+        <html lang="en" className={clsx("h-full", sans.variable, mono.variable)} suppressHydrationWarning>
             <body className={clsx(inter.className, "min-h-screen overflow-x-hidden")}>
                 <Analytics />
                 <Providers>
