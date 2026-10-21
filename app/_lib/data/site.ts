@@ -115,44 +115,30 @@ export const Projects = [
     {
         title: "NarraLeaf-Team",
         subtitle: "TypeScript",
-        status: "In Progress",
+        status: "Finished",
         description: "A self-hosted project server for teams working in NarraLeaf Studio: shared projects, accounts and access checks, run on the team's own network.",
         link: "https://github.com/NarraLeaf/NarraLeaf-Team"
     },
     {
         title: "Studio-Shell",
         subtitle: "Kotlin / Swift",
-        status: "In Progress",
+        status: "Finished",
         description: "The native WebView shells NarraLeaf Studio repacks into Android and iOS builds of a game, so an author never installs a mobile SDK.",
         link: "https://github.com/NarraLeaf/Studio-Shell"
     },
     {
         title: "NarraLeaf Plugins",
         subtitle: "TypeScript",
-        status: "In Progress",
+        status: "Finished",
         description: "The official plugin registry for NarraLeaf Studio.",
         link: "https://github.com/NarraLeaf/Plugins"
     },
     {
         title: "narraleaf.com",
         subtitle: "Fumadocs",
-        status: "In Progress",
+        status: "Finished",
         description: "NarraLeaf's website: documentation and a blog in Chinese, English and Japanese.",
         link: "https://github.com/NarraLeaf/narraleaf.com"
-    },
-    {
-        title: "NarraUI",
-        subtitle: "React",
-        status: "Planning",
-        description: "NarraLeaf's UI framework",
-        link: "https://github.com/NarraLeaf/NarraUI"
-    },
-    {
-        title: "NarraLang VSCode Extension",
-        subtitle: "React",
-        status: "Planning",
-        description: "NarraLang VSCode Extension",
-        link: "https://github.com/NarraLeaf"
     },
     {
         title: "AIAPA",
