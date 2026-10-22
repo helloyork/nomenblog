@@ -78,7 +78,7 @@ const throttle = (func: Function, limit: number) => {
 
 const CursorTrail: React.FC = () => {
     const [trailTriangles, setTrailTriangles] = useState<TrailTriangle[]>([]);
-    const animationRef = useRef<number>();
+    const animationRef = useRef<number | undefined>(undefined);
     const nextId = useRef(0);
     const lastMousePos = useRef({ x: 0, y: 0 });
     const mouseVelocity = useRef({ x: 0, y: 0 });

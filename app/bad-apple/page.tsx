@@ -6,7 +6,7 @@ export default function BadApplePage() {
     const [frames, setFrames] = useState<string[]>([]);
     const [index, setIndex] = useState(0);
     const [state, setState] = useState<"loading" | "ready" | "error">("loading");
-    const timerRef = useRef<number>();
+    const timerRef = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         let cancelled = false;

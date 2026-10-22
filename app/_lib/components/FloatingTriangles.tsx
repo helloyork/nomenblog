@@ -94,7 +94,7 @@ class TrianglePool {
 
 const FloatingTriangles: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const animationRef = useRef<number>();
+    const animationRef = useRef<number | undefined>(undefined);
     const trianglesRef = useRef<Triangle[]>([]);
     const poolRef = useRef(new TrianglePool());
 
